@@ -21,7 +21,7 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements IViewObject {
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -47,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+        // Register view
+        Controller.getInstance().LinkView(context, this);
     }
 
     protected void showCreateTableDialog() {
@@ -90,23 +94,15 @@ public class MainActivity extends AppCompatActivity {
 
         // Cetup a dialog window
         final EditText input = (EditText) promptView.findViewById(R.id.userInput);
-        alertDialogBuilder
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-                        new AlertDialog.Builder(context)
-                                .setTitle("New tabe name is")
-                                .setMessage(input.getText())
-                                .show();
-                    }
-                })
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
+        alertDialogBuilder.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Controller.getInstance().CreateTable(input.getText().toString());
+            }
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
         AlertDialog alertD = alertDialogBuilder.create();
 
         // Show it
@@ -146,16 +142,14 @@ public class MainActivity extends AppCompatActivity {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
+        Action viewAction = Action.newAction(Action.TYPE_VIEW, // TODO: choose an action type.
                 "Main Page", // TODO: Define a title for the content shown.
                 // TODO: If you have web page content that matches this app activity's content,
                 // make sure this auto-generated web page URL is correct.
                 // Otherwise, set the URL to null.
                 Uri.parse("http://host/path"),
                 // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://figat.pl.mobilesql/http/host/path")
-        );
+                Uri.parse("android-app://figat.pl.mobilesql/http/host/path"));
         AppIndex.AppIndexApi.start(client, viewAction);
     }
 
@@ -165,17 +159,39 @@ public class MainActivity extends AppCompatActivity {
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
+        Action viewAction = Action.newAction(Action.TYPE_VIEW, // TODO: choose an action type.
                 "Main Page", // TODO: Define a title for the content shown.
                 // TODO: If you have web page content that matches this app activity's content,
                 // make sure this auto-generated web page URL is correct.
                 // Otherwise, set the URL to null.
                 Uri.parse("http://host/path"),
                 // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://figat.pl.mobilesql/http/host/path")
-        );
+                Uri.parse("android-app://figat.pl.mobilesql/http/host/path"));
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
+    }
+
+    @Override
+    public void Navigate(Table table)
+    {
+        new AlertDialog.Builder(context).setTitle("Navigate to...").setMessage(table.Name).show();
+    }
+
+    @Override
+    public void OnTableAlreadyExists()
+    {
+        new AlertDialog.Builder(context).setTitle("Error").setMessage("Table with that name already exists!").show();
+    }
+
+    @Override
+    public void OnTablesModified()
+    {
+
+    }
+
+    @Override
+    public void OnException(Exception ex, String info)
+    {
+        new AlertDialog.Builder(context).setTitle("Error").setMessage(info + "\n" + ex.getMessage()).show();
     }
 }
