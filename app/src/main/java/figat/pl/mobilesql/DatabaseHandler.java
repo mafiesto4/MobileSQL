@@ -1,5 +1,6 @@
 package figat.pl.mobilesql;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 
 import android.content.ContentValues;
@@ -11,26 +12,94 @@ import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
+    private static final String TAG = "[DB]";
+
     // Database Info
     private static final String DATABASE_NAME = "database.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 9;
 
-    // Table Names
-    private static final String TABLE_POSTS = "posts";
-    private static final String TABLE_USERS = "users";
-
-    // Post Table Columns
-    private static final String KEY_POST_ID = "id";
-    private static final String KEY_POST_USER_ID_FK = "userId";
-    private static final String KEY_POST_TEXT = "text";
-
-    // User Table Columns
-    private static final String KEY_USER_ID = "id";
-    private static final String KEY_USER_NAME = "userName";
-    private static final String KEY_USER_PROFILE_PICTURE_URL = "profilePictureUrl";
+    // Root table
+    private static final String TABLE_ROOT = "root";
+    private static final String KEY_TABLE_ID = "id";
+    private static final String KEY_TABLE_NAME = "name";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    public void loadTables(ArrayList<Table> tables) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        // Clear list
+        tables.clear();
+
+        // Ensure that root table exists
+        if (isTableExists(db, TABLE_ROOT)) {
+
+            // Gather all tables entries from the root table
+            Cursor cursor = db.rawQuery("SELECT " + KEY_TABLE_NAME + " FROM " + TABLE_ROOT, null);
+
+            try {
+                if (cursor.moveToFirst()) {
+                    do {
+
+                        Table t = new Table();
+                        t.Name = cursor.getString(cursor.getColumnIndexOrThrow(KEY_TABLE_NAME));
+                        t.EntriesCount = 0;
+                        tables.add(t);
+
+                    } while (cursor.moveToNext());
+                }
+            } catch (Exception ex) {
+                Log.d(TAG, "Error while trying to get posts from database");
+            } finally {
+                if (cursor != null && !cursor.isClosed()) {
+                    cursor.close();
+                }
+            }
+        }
+
+        db.close();
+    }
+
+    public void createTable(String name) {
+        // Validate name
+        if (name == TABLE_ROOT)
+            throw new InvalidParameterException("Invalid table name!");
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.execSQL("DROP TABLE IF EXISTS " + name);
+        db.execSQL("CREATE TABLE " + name + "( Dummy INTEGER );");
+
+        db.beginTransaction();
+        try {
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(KEY_TABLE_NAME, name);
+            db.insertOrThrow(TABLE_ROOT, null, contentValues);
+            db.setTransactionSuccessful();
+
+        } catch (Exception ex) {
+            Log.d(TAG, "Error while trying to add post to database");
+        } finally {
+            db.endTransaction();
+        }
+
+        db.close();
+    }
+
+    private static boolean isTableExists(SQLiteDatabase db, String tableName) {
+        if (tableName == null || db == null || !db.isOpen()) {
+            return false;
+        }
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM sqlite_master WHERE type = ? AND name = ?", new String[]{"table", tableName});
+        if (!cursor.moveToFirst()) {
+            return false;
+    }
+        int count = cursor.getInt(0);
+        cursor.close();
+        return count > 0;
     }
 
     // Called when the database connection is being configured.
@@ -45,22 +114,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // If a database already exists on disk with the same DATABASE_NAME, this method will NOT be called.
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_POSTS_TABLE = "CREATE TABLE " + TABLE_POSTS +
+        String CREATE_ROOT_TABLE = "CREATE TABLE " + TABLE_ROOT +
                 "(" +
-                KEY_POST_ID + " INTEGER PRIMARY KEY," + // Define a primary key
-                KEY_POST_USER_ID_FK + " INTEGER REFERENCES " + TABLE_USERS + "," + // Define a foreign key
-                KEY_POST_TEXT + " TEXT" +
+                KEY_TABLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                KEY_TABLE_NAME + " TEXT NOT NULL" +
                 ")";
 
-        String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS +
-                "(" +
-                KEY_USER_ID + " INTEGER PRIMARY KEY," +
-                KEY_USER_NAME + " TEXT," +
-                KEY_USER_PROFILE_PICTURE_URL + " TEXT" +
-                ")";
-
-        db.execSQL(CREATE_POSTS_TABLE);
-        db.execSQL(CREATE_USERS_TABLE);
+        db.execSQL(CREATE_ROOT_TABLE);
     }
 
     // Called when the database needs to be upgraded.
@@ -70,8 +130,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion != newVersion) {
             // Simplest implementation is to drop all old tables and recreate them
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_POSTS);
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_ROOT);
             onCreate(db);
         }
     }

@@ -10,10 +10,31 @@ public class Model {
     DatabaseHandler handler;
     ArrayList<Table> tables;
 
+    /**
+     * Gets amount of tables
+     * @return Amount of tables in a database
+     */
+    public int GetTablesCount()
+    {
+        return tables.size();
+    }
+
+    /***
+     * Gets table at given index
+     * @param index Table index
+     * @return Table
+     */
+    public Table GetTable(int index)
+    {
+        return tables.get(index);
+    }
+
     public Model(Context context)
     {
         handler = new DatabaseHandler(context);
         tables = new ArrayList<>();
+
+        handler.loadTables(tables);
     }
 
     /**
@@ -24,7 +45,7 @@ public class Model {
     public Table FindTable(String name) {
         Table result = null;
         for (int i = 0; i < tables.size(); i++) {
-            if (tables.get(i).Name == name) {
+            if (tables.get(i).Name.compareTo(name) == 0) {
                 result = tables.get(i);
                 break;
             }
@@ -41,9 +62,7 @@ public class Model {
     public Table CreateTable(String name) {
 
         // Create SQL table
-        SQLiteDatabase db = handler.getWritableDatabase();
-        db.execSQL("CREATE TABLE " + name + "( PersonID int );");
-        db.close();
+       handler.createTable(name);
 
         // Create table entry
         Table table = new Table();

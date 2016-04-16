@@ -19,6 +19,8 @@ public class Controller {
     {
         model = new Model(context);
         view = viewObj;
+
+        view.OnTablesModified();
     }
 
     public Model GetModel()

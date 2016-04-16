@@ -15,11 +15,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements IViewObject {
 
@@ -29,6 +33,11 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
      */
     private GoogleApiClient client;
     final Context context = this;
+
+    // Tables list view
+    private ListView tablesListView;
+    private ArrayList<String> tablesList;
+    private ArrayAdapter<String> tablesListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +57,12 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+        // Tables list
+        tablesListView = (ListView)findViewById(R.id.listView);
+        tablesList = new ArrayList<>();
+        tablesListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, tablesList);
+        tablesListView.setAdapter(tablesListAdapter);
 
         // Register view
         Controller.getInstance().LinkView(context, this);
@@ -184,9 +199,12 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
     }
 
     @Override
-    public void OnTablesModified()
-    {
-
+    public void OnTablesModified() {
+        tablesList.clear();
+        Model model = Controller.getInstance().GetModel();
+        for (int i = 0; i < model.GetTablesCount(); i++)
+            tablesList.add(model.GetTable(i).Name);
+        tablesListAdapter.notifyDataSetChanged();
     }
 
     @Override
