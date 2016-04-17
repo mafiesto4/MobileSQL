@@ -15,7 +15,7 @@ public class Controller {
     private Controller() {
     }
 
-    public void LinkView(Context context, IViewObject viewObj)
+    public void linkView(Context context, IViewObject viewObj)
     {
         model = new Model(context);
         view = viewObj;
@@ -23,7 +23,7 @@ public class Controller {
         view.OnTablesModified();
     }
 
-    public Model GetModel()
+    public Model getModel()
     {
         return model;
     }
@@ -33,11 +33,11 @@ public class Controller {
      *
      * @param name New table name
      */
-    public void CreateTable(String name) {
+    public void createTable(String name) {
 
         try {
             // Validate table name
-            Table table = model.FindTable(name);
+            Table table = model.findTable(name);
             if (table != null) {
                 // Error
                 view.OnTableAlreadyExists();
@@ -45,7 +45,7 @@ public class Controller {
             }
 
             // Create table
-            table = model.CreateTable(name);
+            table = model.createTable(name);
 
             // Refresh tables list
             view.OnTablesModified();

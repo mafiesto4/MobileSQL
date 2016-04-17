@@ -3,6 +3,5 @@
     <string name="action_settings">Settings</string>
     <string name="action_exit">Exit</string>
     <string name="input_new_table">Enter new table name</string>
-    <string name="title_activity_tabele_view">Tabele View</string>
     <string name="section_format">Hello World from section: %1$d</string>
 </resources>

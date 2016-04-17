@@ -13,6 +13,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,8 @@ import android.view.ViewDebug.CapturedViewProperty;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Adapter;
 import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -89,24 +92,28 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
                 Navigate(item);
             }
         });
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.viewTablesListAdd);
-        fab.setOnClickListener(new View.OnClickListener() {
+        ((FloatingActionButton)findViewById(R.id.viewTablesListAdd)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showCreateTableDialog();
             }
         });
-        Toolbar toolbar = (Toolbar)findViewById(R.id.viewTablesListToolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar((Toolbar)findViewById(R.id.viewTablesListToolbar));
 
         // Table View
         tableViewTable = (TableLayout)findViewById(R.id.viewTableViewTable);
+        ((FloatingActionButton)findViewById(R.id.viewTableViewAdd)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAddEntry();
+            }
+        });
 
         // Register view
-        Controller.getInstance().LinkView(context, this);
+        Controller.getInstance().linkView(context, this);
     }
 
-    protected void showCreateTableDialog() {
+    private void showCreateTableDialog() {
 
         // Setup a dialog window
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
@@ -116,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         final EditText input = (EditText) promptView.findViewById(R.id.userInput);
         alertDialogBuilder.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                Controller.getInstance().CreateTable(input.getText().toString());
+                Controller.getInstance().createTable(input.getText().toString());
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -127,6 +134,11 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
 
         // Show it
         alertD.show();
+    }
+
+    private void showAddEntry()
+    {
+        new AlertDialog.Builder(context).setTitle("TODO").setMessage("TODO: create new table entry").show();
     }
 
     @Override
@@ -161,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
 
             // Check if is viewing a table
             if(currentView == viewTableView) {
-                crossfade(viewTablesList);
+                showTablesList();
                 return true;
             }
         }
@@ -206,15 +218,67 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
 
     public void Navigate(String table)
     {
-        Navigate(Controller.getInstance().GetModel().FindTable(table));
+        Navigate(Controller.getInstance().getModel().findTable(table));
     }
 
     @Override
-    public void Navigate(Table table)
-    {
-        crossfade(viewTableView);
+    public void Navigate(Table table) {
+        // Check if show default page
+        if (table == null) {
+            showTablesList();
+            return;
+        }
 
-        //new AlertDialog.Builder(context).setTitle("Navigate to...").setMessage(table.Name).show();
+        // Navigate to that view
+        changeView(viewTableView);
+        Toolbar toolbar = (Toolbar)findViewById(R.id.viewTableViewToolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle(table.Name);
+
+        // Clear previous table
+        tableViewTable.removeAllViews();
+
+        // Get all table data
+        Controller.getInstance().getModel().getTableData(table);
+
+        // Add header row
+        TableRow headerRow = new TableRow(this);
+        headerRow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        for(int i=0;i<table.ColumnNames.length;i++) {
+            TextView tv = new TextView(this);
+            tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            //tv.setBackgroundResource(R.drawable.cell_shape);
+            tv.setGravity(Gravity.CENTER);
+            tv.setTextSize(20);
+            tv.setPadding(0, 5, 0, 5);
+            tv.setText(table.ColumnNames[i]);
+            headerRow.addView(tv);
+        }
+        tableViewTable.addView(headerRow);
+
+        // Fill table (row by row)
+        for (int i = 0; i < table.Data.size(); i++) {
+
+            TableRow row = new TableRow(this);
+            row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+            String[] rowData = table.Data.get(i);
+
+            // Add all columns
+            for (int j = 0; j < rowData.length; j++) {
+
+                TextView tv = new TextView(this);
+                tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+                //tv.setBackgroundResource(R.drawable.cell_shape);
+                tv.setGravity(Gravity.CENTER);
+                tv.setTextSize(18);
+                tv.setPadding(0, 5, 0, 5);
+                tv.setText(rowData[j]);
+
+                row.addView(tv);
+            }
+
+            tableViewTable.addView(row);
+        }
     }
 
     @Override
@@ -226,9 +290,9 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
     @Override
     public void OnTablesModified() {
         tablesList.clear();
-        Model model = Controller.getInstance().GetModel();
-        for (int i = 0; i < model.GetTablesCount(); i++)
-            tablesList.add(model.GetTable(i).Name);
+        Model model = Controller.getInstance().getModel();
+        for (int i = 0; i < model.getTablesCount(); i++)
+            tablesList.add(model.getTable(i).Name);
         tablesListAdapter.notifyDataSetChanged();
     }
 
@@ -238,7 +302,13 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         new AlertDialog.Builder(context).setTitle("Error").setMessage(info + "\n" + ex.getMessage()).show();
     }
 
-    private void crossfade(View targetView) {
+    private void showTablesList()
+    {
+        changeView(viewTablesList);
+        setSupportActionBar((Toolbar)findViewById(R.id.viewTablesListToolbar));
+    }
+
+    private void changeView(View targetView) {
 
         // Check if view won't change
         if(targetView == currentView)

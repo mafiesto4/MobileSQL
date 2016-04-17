@@ -12,7 +12,7 @@ import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    private static final String TAG = "[DB]";
+    public static final String TAG = "DB: ";
 
     // Database Info
     private static final String DATABASE_NAME = "database.db";
@@ -51,7 +51,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     } while (cursor.moveToNext());
                 }
             } catch (Exception ex) {
-                Log.d(TAG, "Error while trying to get posts from database");
+                Log.d(TAG, "Error while trying to get data from database");
             } finally {
                 if (cursor != null && !cursor.isClosed()) {
                     cursor.close();
@@ -71,7 +71,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXISTS " + name);
         db.execSQL("CREATE TABLE " + name + "( Dummy INTEGER );");
-
+        
         db.beginTransaction();
         try {
 
