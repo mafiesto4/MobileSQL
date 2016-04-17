@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings" />
+        android:id="@+id/action_querySql"
+        android:orderInCategory="1100"
+        android:title="@string/querySql" />
     <item
-        android:id="@+id/action_exit"
-        android:orderInCategory="900"
-        android:title="@string/action_exit"/>
+        android:id="@+id/action_newEntry"
+        android:orderInCategory="1200"
+        android:title="@string/newEntry" />
+    <item
+        android:id="@+id/action_deleteTable"
+        android:orderInCategory="1900"
+        android:title="@string/deleteTable"/>
 </menu>

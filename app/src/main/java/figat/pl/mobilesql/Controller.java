@@ -30,7 +30,6 @@ public class Controller {
 
     /**
      * Creates new sql database table
-     *
      * @param name New table name
      */
     public void createTable(String name) {

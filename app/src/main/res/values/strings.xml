@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">MobileSQL</string>
-    <string name="action_settings">Settings</string>
     <string name="action_exit">Exit</string>
     <string name="input_new_table">Enter new table name</string>
-    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="querySql">Query SQL</string>
+    <string name="newEntry">New entry</string>
+    <string name="deleteTable">Delete table</string>
 </resources>

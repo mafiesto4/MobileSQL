@@ -102,24 +102,19 @@ public class Model {
 
                     String[] rowData = new String[columns];
 
-                    for (int col = 0; col < columns; col++) {
-
-                        if(row == 0)
-                        {
-                            Log.d("DB: ",  cursor.getColumnName(col));
-                        }
-
+                    for (int col = 0; col < columns; col++)
                         rowData[col] = cursor.getString(col);
-
-                        cursor.moveToNext();
-                    }
 
                     table.Data.add(rowData);
                     table.EntriesCount++;
+
+                    if (!cursor.moveToNext())
+                        break;
                 }
             }
         } catch (Exception ex) {
             Log.d(DatabaseHandler.TAG, "Error while trying to get table data from database");
+            throw ex;
         } finally {
             if (cursor != null && !cursor.isClosed()) {
                 cursor.close();

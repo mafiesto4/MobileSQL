@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         // Tables List
         tablesListView = (ListView) findViewById(R.id.viewTablesListTables);
         tablesList = new ArrayList<>();
-        tablesListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, tablesList);
+        tablesListAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, tablesList);
         tablesListView.setAdapter(tablesListAdapter);
         tablesListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
@@ -92,20 +92,30 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
                 Navigate(item);
             }
         });
-        ((FloatingActionButton)findViewById(R.id.viewTablesListAdd)).setOnClickListener(new View.OnClickListener() {
+        (findViewById(R.id.viewTablesListAdd)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showCreateTableDialog();
             }
         });
-        setSupportActionBar((Toolbar)findViewById(R.id.viewTablesListToolbar));
+        Toolbar tableListToolbar = (Toolbar)findViewById(R.id.viewTablesListToolbar);
+        setSupportActionBar(tableListToolbar);
 
         // Table View
         tableViewTable = (TableLayout)findViewById(R.id.viewTableViewTable);
-        ((FloatingActionButton)findViewById(R.id.viewTableViewAdd)).setOnClickListener(new View.OnClickListener() {
+        (findViewById(R.id.viewTableViewAdd)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showAddEntry();
+            }
+        });
+        Toolbar tableViewToolbar = (Toolbar)findViewById(R.id.viewTableViewToolbar);
+        tableViewToolbar.inflateMenu(R.menu.menu_table);
+        tableViewToolbar.setNavigationIcon(R.drawable.ic_action_arrow_left);
+        tableViewToolbar.setNavigationOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showTablesList();
             }
         });
 
@@ -155,12 +165,21 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        // Table List
         if (id == R.id.action_exit) {
             finishAffinity();
+            return true;
+        }
+        if(id == R.id.action_deleteTable) {
+            new AlertDialog.Builder(context).setTitle("TODO").setMessage("TODO: delete current table").show();
+            return true;
+        }
+        if(id == R.id.action_newEntry) {
+            showAddEntry();
+            return true;
+        }
+        if(id == R.id.action_querySql) {
+            new AlertDialog.Builder(context).setTitle("TODO").setMessage("TODO: show new query SQL dialog").show();
             return true;
         }
 
@@ -231,53 +250,58 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
 
         // Navigate to that view
         changeView(viewTableView);
-        Toolbar toolbar = (Toolbar)findViewById(R.id.viewTableViewToolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.viewTableViewToolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(table.Name);
 
         // Clear previous table
         tableViewTable.removeAllViews();
 
-        // Get all table data
-        Controller.getInstance().getModel().getTableData(table);
+        try {
 
-        // Add header row
-        TableRow headerRow = new TableRow(this);
-        headerRow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-        for(int i=0;i<table.ColumnNames.length;i++) {
-            TextView tv = new TextView(this);
-            tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-            //tv.setBackgroundResource(R.drawable.cell_shape);
-            tv.setGravity(Gravity.CENTER);
-            tv.setTextSize(20);
-            tv.setPadding(0, 5, 0, 5);
-            tv.setText(table.ColumnNames[i]);
-            headerRow.addView(tv);
-        }
-        tableViewTable.addView(headerRow);
+            // Get all table data
+            Controller.getInstance().getModel().getTableData(table);
 
-        // Fill table (row by row)
-        for (int i = 0; i < table.Data.size(); i++) {
-
-            TableRow row = new TableRow(this);
-            row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-            String[] rowData = table.Data.get(i);
-
-            // Add all columns
-            for (int j = 0; j < rowData.length; j++) {
-
+            // Add header row
+            TableRow headerRow = new TableRow(this);
+            headerRow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+            for (int i = 0; i < table.ColumnNames.length; i++) {
                 TextView tv = new TextView(this);
                 tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
                 //tv.setBackgroundResource(R.drawable.cell_shape);
                 tv.setGravity(Gravity.CENTER);
-                tv.setTextSize(18);
+                tv.setTextSize(20);
                 tv.setPadding(0, 5, 0, 5);
-                tv.setText(rowData[j]);
-
-                row.addView(tv);
+                tv.setText(table.ColumnNames[i]);
+                headerRow.addView(tv);
             }
+            tableViewTable.addView(headerRow);
 
-            tableViewTable.addView(row);
+            // Fill table (row by row)
+            for (int i = 0; i < table.Data.size(); i++) {
+
+                TableRow row = new TableRow(this);
+                row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+                String[] rowData = table.Data.get(i);
+
+                // Add all columns
+                for (int j = 0; j < rowData.length; j++) {
+
+                    TextView tv = new TextView(this);
+                    tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+                    //tv.setBackgroundResource(R.drawable.cell_shape);
+                    tv.setGravity(Gravity.CENTER);
+                    tv.setTextSize(18);
+                    tv.setPadding(0, 5, 0, 5);
+                    tv.setText(rowData[j]);
+
+                    row.addView(tv);
+                }
+
+                tableViewTable.addView(row);
+            }
+        } catch (Exception ex) {
+            OnException(ex, "Cannot show table " + table.Name);
         }
     }
 

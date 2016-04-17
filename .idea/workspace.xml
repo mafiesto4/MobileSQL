@@ -22,15 +22,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="18210a27-61cd-4e06-8e2c-803c334f51d3" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/menu/menu_table.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/src/main/res/menu/menu_tabele_view.xml" afterPath="" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ic_action_arrow_left.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-mdpi/ic_action_arrow_left.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/ic_action_arrow_left.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_action_arrow_left.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-xxxhdpi/ic_action_arrow_left.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/Controller.java" afterPath="$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/Controller.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/DatabaseHandler.java" afterPath="$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/DatabaseHandler.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/MainActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/Model.java" afterPath="$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/Model.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/Table.java" afterPath="$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/Table.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/menu/menu_main.xml" afterPath="$PROJECT_DIR$/app/src/main/res/menu/menu_main.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/menu/menu_table.xml" afterPath="$PROJECT_DIR$/app/src/main/res/menu/menu_table.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
     </list>
     <ignored path="MobileSQL.iws" />
@@ -76,19 +78,21 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="236" column="0" selection-start-line="236" selection-start-column="0" selection-end-line="236" selection-end-column="0" />
+              <caret line="285" column="0" selection-start-line="285" selection-start-column="0" selection-end-line="285" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#4312#4460#0" expanded="true" />
+                <element signature="e#4459#4460#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Controller.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Controller.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="34" column="7" selection-start-line="34" selection-start-column="7" selection-end-line="34" selection-end-column="7" />
+            <state vertical-scroll-proportion="0.2994129">
+              <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
               <folding>
                 <element signature="e#517#518#0" expanded="true" />
                 <element signature="e#545#546#0" expanded="true" />
@@ -101,7 +105,7 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/Model.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="101" column="0" selection-start-line="101" selection-start-column="0" selection-end-line="101" selection-end-column="0" />
+              <caret line="109" column="0" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -115,8 +119,8 @@
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-7.2363634">
-              <caret line="79" column="0" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
+            <state vertical-scroll-proportion="14.218182">
+              <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
               <folding>
                 <element signature="e#1764#1797#0" expanded="true" />
                 <element signature="e#1842#1877#0" expanded="true" />
@@ -151,19 +155,17 @@
       <file leaf-file-name="menu_main.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/menu_main.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.5">
-              <caret line="13" column="35" selection-start-line="13" selection-start-column="35" selection-end-line="13" selection-end-column="35" />
-              <folding>
-                <element signature="e#337#362#0" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="-2.6153846">
+              <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DatabaseHandler.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DatabaseHandler.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/DatabaseHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.49902153">
+            <state vertical-scroll-proportion="0.0">
               <caret line="73" column="8" selection-start-line="73" selection-start-column="8" selection-end-line="73" selection-end-column="8" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -175,11 +177,12 @@
       <file leaf-file-name="menu_table.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/menu_table.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.9615384">
-              <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
+            <state vertical-scroll-proportion="-7.8461537">
+              <caret line="12" column="34" selection-start-line="12" selection-start-column="34" selection-end-line="12" selection-end-column="34" />
               <folding>
-                <element signature="e#217#242#0" expanded="true" />
-                <element signature="e#354#375#0" expanded="true" />
+                <element signature="e#218#236#0" expanded="true" />
+                <element signature="e#353#371#0" expanded="true" />
+                <element signature="e#491#512#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -188,18 +191,8 @@
       <file leaf-file-name="strings.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.2830188">
-              <caret line="4" column="64" selection-start-line="4" selection-start-column="64" selection-end-line="4" selection-end-column="64" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="colors.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.9230769">
-              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+            <state vertical-scroll-proportion="-0.3207547">
+              <caret line="1" column="46" selection-start-line="1" selection-start-column="46" selection-end-line="1" selection-end-column="46" />
               <folding />
             </state>
           </provider>
@@ -1770,7 +1763,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/menu/menu_main.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/plus_48.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/plus.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/IViewObject.java" />
@@ -1781,15 +1773,16 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/card_flip_right_out.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/content_main.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/TabeleView.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/Controller.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/Table.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/Model.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/menu/menu_table.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/menu/menu_table.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/Controller.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/menu/menu_main.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/MainActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/DatabaseHandler.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/Model.java" />
       </list>
     </option>
   </component>
@@ -1978,10 +1971,10 @@
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="device.picker.selection" value="4a76c053" />
     <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager2.WIDTH" value="450" />
-    <property name="asset" value="rO0ABXNyADxkZS5tcHJlbmdlbWFubi5pbnRlbGxpai5wbHVnaW4uYW5kcm9pZGljb25zLm1vZGVsLkltYWdlQXNzZXQl990GqIfF7gIABkwACGNhdGVnb3J5dAASTGphdmEvbGFuZy9TdHJpbmc7TAAGY29sb3JzdAAQTGphdmEvdXRpbC9MaXN0O0wABG5hbWVxAH4AAUwABHBhY2txAH4AAUwAC3Jlc29sdXRpb25zcQB+AAJMAAVzaXplc3EAfgACeHB0AANhbGxzcgATamF2YS51dGlsLkFycmF5TGlzdHiB0h2Zx2GdAwABSQAEc2l6ZXhwAAAADncEAAAADnQABWJsYWNrdAAJYmx1ZV9kYXJrdAAKYmx1ZV9saWdodHQACmdyZWVuX2Rhcmt0AAtncmVlbl9saWdodHQACWhvbG9fZGFya3QACmhvbG9fbGlnaHR0AAtwdXJwbGVfZGFya3QADHB1cnBsZV9saWdodHQACHJlZF9kYXJrdAAJcmVkX2xpZ2h0dAAFd2hpdGV0AAt5ZWxsb3dfZGFya3QADHllbGxvd19saWdodHh0AA1pY19hY3Rpb25fYWRkdAANYW5kcm9pZF9pY29uc3NxAH4ABQAAAAV3BAAAAAV+cgA8ZGUubXByZW5nZW1hbm4uaW50ZWxsaWoucGx1Z2luLmFuZHJvaWRpY29ucy5tb2RlbC5SZXNvbHV0aW9uAAAAAAAAAAASAAB4cgAOamF2YS5sYW5nLkVudW0AAAAAAAAAABIAAHhwdAAESERQSX5xAH4AGHQABExEUEl+cQB+ABh0AARNRFBJfnEAfgAYdAAFWEhEUEl+cQB+ABh0AAZYWEhEUEl4c3EAfgAFAAAAAXcEAAAAAXQABDE4ZHB4" />
+    <property name="asset" value="rO0ABXNyADxkZS5tcHJlbmdlbWFubi5pbnRlbGxpai5wbHVnaW4uYW5kcm9pZGljb25zLm1vZGVsLkltYWdlQXNzZXQl990GqIfF7gIABkwACGNhdGVnb3J5dAASTGphdmEvbGFuZy9TdHJpbmc7TAAGY29sb3JzdAAQTGphdmEvdXRpbC9MaXN0O0wABG5hbWVxAH4AAUwABHBhY2txAH4AAUwAC3Jlc29sdXRpb25zcQB+AAJMAAVzaXplc3EAfgACeHB0AANhbGxzcgATamF2YS51dGlsLkFycmF5TGlzdHiB0h2Zx2GdAwABSQAEc2l6ZXhwAAAADncEAAAADnQABWJsYWNrdAAJYmx1ZV9kYXJrdAAKYmx1ZV9saWdodHQACmdyZWVuX2Rhcmt0AAtncmVlbl9saWdodHQACWhvbG9fZGFya3QACmhvbG9fbGlnaHR0AAtwdXJwbGVfZGFya3QADHB1cnBsZV9saWdodHQACHJlZF9kYXJrdAAJcmVkX2xpZ2h0dAAFd2hpdGV0AAt5ZWxsb3dfZGFya3QADHllbGxvd19saWdodHh0ABRpY19hY3Rpb25fYXJyb3dfbGVmdHQADWFuZHJvaWRfaWNvbnNzcQB+AAUAAAAFdwQAAAAFfnIAPGRlLm1wcmVuZ2VtYW5uLmludGVsbGlqLnBsdWdpbi5hbmRyb2lkaWNvbnMubW9kZWwuUmVzb2x1dGlvbgAAAAAAAAAAEgAAeHIADmphdmEubGFuZy5FbnVtAAAAAAAAAAASAAB4cHQABEhEUEl+cQB+ABh0AARMRFBJfnEAfgAYdAAETURQSX5xAH4AGHQABVhIRFBJfnEAfgAYdAAGWFhIRFBJeHNxAH4ABQAAAAF3BAAAAAF0AAQxOGRweA==" />
     <property name="color" value="white" />
     <property name="size" value="18dp" />
-    <property name="resolutions" value="MDPI&#10;XXXHDPI&#10;HDPI&#10;XHDPI&#10;XXHDPI" />
+    <property name="resolutions" value="XXHDPI&#10;XXXHDPI&#10;MDPI&#10;HDPI&#10;XHDPI" />
     <property name="resourcesRoot" value="file://C:\Users\Wojtek\AndroidStudioProjects\MobileSQL\app\src\main\res" />
     <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager2.SHOW" value="true" />
   </component>
@@ -2331,27 +2324,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/Model.java</url>
-          <line>89</line>
-          <properties />
-          <option name="timeStamp" value="33" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/Model.java</url>
-          <line>92</line>
-          <properties />
-          <option name="timeStamp" value="34" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/Model.java</url>
-          <line>95</line>
-          <properties />
-          <option name="timeStamp" value="35" />
-        </line-breakpoint>
-      </breakpoints>
-      <option name="time" value="36" />
+      <option name="time" value="54" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -2622,39 +2595,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/menu_main.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.5">
-          <caret line="13" column="35" selection-start-line="13" selection-start-column="35" selection-end-line="13" selection-end-column="35" />
-          <folding>
-            <element signature="e#337#362#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/menu_table.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.9615384">
-          <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
-          <folding>
-            <element signature="e#217#242#0" expanded="true" />
-            <element signature="e#354#375#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/values/styles.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33406115">
           <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.2830188">
-          <caret line="4" column="64" selection-start-line="4" selection-start-column="64" selection-end-line="4" selection-end-column="64" />
           <folding />
         </state>
       </provider>
@@ -2667,34 +2611,60 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_main.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/menu_table.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.8545455">
-          <caret line="6" column="59" selection-start-line="6" selection-start-column="59" selection-end-line="6" selection-end-column="59" />
+        <state vertical-scroll-proportion="-7.8461537">
+          <caret line="12" column="34" selection-start-line="12" selection-start-column="34" selection-end-line="12" selection-end-column="34" />
+          <folding>
+            <element signature="e#218#236#0" expanded="true" />
+            <element signature="e#353#371#0" expanded="true" />
+            <element signature="e#491#512#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/menu_main.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.6153846">
+          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/Model.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.3207547">
+          <caret line="1" column="46" selection-start-line="1" selection-start-column="46" selection-end-line="1" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build/generated/source/r/debug/figat/pl/mobilesql/R.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.34862384">
+          <caret line="2336" column="32" selection-start-line="2336" selection-start-column="32" selection-end-line="2336" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/DatabaseHandler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="101" column="0" selection-start-line="101" selection-start-column="0" selection-end-line="101" selection-end-column="0" />
+          <caret line="73" column="8" selection-start-line="73" selection-start-column="8" selection-end-line="73" selection-end-column="8" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/Controller.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="34" column="7" selection-start-line="34" selection-start-column="7" selection-end-line="34" selection-end-column="7" />
+          <caret line="285" column="0" selection-start-line="285" selection-start-column="0" selection-end-line="285" selection-end-column="0" />
           <folding>
-            <element signature="e#517#518#0" expanded="true" />
-            <element signature="e#545#546#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#4312#4460#0" expanded="true" />
+            <element signature="e#4459#4460#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2704,8 +2674,8 @@
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.2363634">
-          <caret line="79" column="0" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
+        <state vertical-scroll-proportion="14.218182">
+          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
           <folding>
             <element signature="e#1764#1797#0" expanded="true" />
             <element signature="e#1842#1877#0" expanded="true" />
@@ -2723,22 +2693,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/MainActivity.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_main.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.8545455">
+          <caret line="6" column="59" selection-start-line="6" selection-start-column="59" selection-end-line="6" selection-end-column="59" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/Model.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="236" column="0" selection-start-line="236" selection-start-column="0" selection-end-line="236" selection-end-column="0" />
+          <caret line="109" column="0" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/DatabaseHandler.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/figat/pl/mobilesql/Controller.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.49902153">
-          <caret line="73" column="8" selection-start-line="73" selection-start-column="8" selection-end-line="73" selection-end-column="8" />
+        <state vertical-scroll-proportion="0.2994129">
+          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#517#518#0" expanded="true" />
+            <element signature="e#545#546#0" expanded="true" />
           </folding>
         </state>
       </provider>
