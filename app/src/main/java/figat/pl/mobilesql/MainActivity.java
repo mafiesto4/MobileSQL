@@ -33,6 +33,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewDebug.CapturedViewProperty;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Adapter;
+import android.widget.TableLayout;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -43,17 +44,8 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements IViewObject {
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
     private GoogleApiClient client;
     final Context context = this;
-
-    // Tables list view
-    private ListView tablesListView;
-    private ArrayList<String> tablesList;
-    private ArrayAdapter<String> tablesListAdapter;
 
     // Switching views
     private View viewTablesList;
@@ -62,36 +54,30 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
     private View previousView;
     private int mShortAnimationDuration;
 
+    // Tables List
+    private ListView tablesListView;
+    private ArrayList<String> tablesList;
+    private ArrayAdapter<String> tablesListAdapter;
+
+    // Table View
+    private TableLayout tableViewTable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
-
-        viewTablesList = findViewById(R.id.mainView);
-        viewTableView = findViewById(R.id.loading_spinner);
+        // View changing
+        viewTablesList = findViewById(R.id.viewTablesList);
+        viewTableView = findViewById(R.id.viewTableView);
         viewTableView.setVisibility(View.GONE);
         currentView = viewTablesList;
         previousView = null;
         mShortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showCreateTableDialog();
-            }
-        });
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-
-        // Tables list
-        tablesListView = (ListView) findViewById(R.id.listView);
+        // Tables List
+        tablesListView = (ListView) findViewById(R.id.viewTablesListTables);
         tablesList = new ArrayList<>();
         tablesListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, tablesList);
         tablesListView.setAdapter(tablesListAdapter);
@@ -103,51 +89,30 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
                 Navigate(item);
             }
         });
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.viewTablesListAdd);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCreateTableDialog();
+            }
+        });
+        Toolbar toolbar = (Toolbar)findViewById(R.id.viewTablesListToolbar);
+        setSupportActionBar(toolbar);
+
+        // Table View
+        tableViewTable = (TableLayout)findViewById(R.id.viewTableViewTable);
 
         // Register view
         Controller.getInstance().LinkView(context, this);
     }
 
     protected void showCreateTableDialog() {
-        //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-        //        .setAction("Action", null).show();
 
-        /*new AlertDialog.Builder(this)
-                .setTitle("Enter table name")
-                .setMessage("trolololo")
-                .show();*/
-
-       /* final EditText txtUrl = new EditText(this);
-
-        // Set the default text to a link of the Queen
-        txtUrl.setHint("http://www.librarising.com/astrology/celebs/images2/QR/queenelizabethii.jpg");
-
-        new AlertDialog.Builder(this)
-                .setTitle("Enter table name")
-                .setMessage("Paste in the link of an image to moustachify!")
-                .setPositiveButton("Moustachify", new OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        String url = txtUrl.getText().toString();
-                        moustachify(null, url);
-                    }
-                })
-                .setNegativeButton("Cancel", new View.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                    }
-                })
-                .show();*/
-
-        // get prompts.xml view
-        LayoutInflater layoutInflater = LayoutInflater.from(context);
-
-        View promptView = layoutInflater.inflate(R.layout.new_table, null);
-
+        // Setup a dialog window
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-
-        // set prompts.xml to be the layout file of the alertdialog builder
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        View promptView = layoutInflater.inflate(R.layout.new_table, null);
         alertDialogBuilder.setView(promptView);
-
-        // Cetup a dialog window
         final EditText input = (EditText) promptView.findViewById(R.id.userInput);
         alertDialogBuilder.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -248,6 +213,7 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
     public void Navigate(Table table)
     {
         crossfade(viewTableView);
+
         //new AlertDialog.Builder(context).setTitle("Navigate to...").setMessage(table.Name).show();
     }
 
