@@ -77,20 +77,17 @@ public class Model {
     public void getTableData(Table table) {
 
         // Prepare
-        table.EntriesCount = 0;
-        if(table.Data == null)
+        if (table.Data == null)
             table.Data = new ArrayList<>();
         else
             table.Data.clear();
 
         SQLiteDatabase db = handler.getReadableDatabase();
 
-        // Gather table meta
-        Cursor cursor = db.query(table.Name, null, null, null, null, null, null);
-        table.ColumnNames = cursor.getColumnNames();
-
         // Gather all tables entries
-        cursor = db.rawQuery("SELECT * FROM " + table.Name, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + table.Name, null);
+        table.ColumnNames = cursor.getColumnNames();
+        table.EntriesCount = cursor.getCount();
 
         try {
             if (cursor.moveToFirst()) {
@@ -106,7 +103,6 @@ public class Model {
                         rowData[col] = cursor.getString(col);
 
                     table.Data.add(rowData);
-                    table.EntriesCount++;
 
                     if (!cursor.moveToNext())
                         break;

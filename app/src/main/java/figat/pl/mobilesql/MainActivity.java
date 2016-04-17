@@ -3,16 +3,14 @@ package figat.pl.mobilesql;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
-import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.DialogPreference;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -23,27 +21,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.content.Context;
-import android.os.Parcelable;
-import android.util.AttributeSet;
-import android.util.SparseArray;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
-import android.view.ViewDebug.CapturedViewProperty;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.Adapter;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements IViewObject {
 
@@ -64,6 +50,18 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
 
     // Table View
     private TableLayout tableViewTable;
+
+    /*
+    TODO: navigation bar conetxxt menu for table view page
+    TODO: navigation icon back for table view page
+    TODO: show table list
+    TODO: exec sql page
+    TODO: show exec sql result
+    TODO: creating new entries dialog (or page)
+    TODO: delete table
+    TODO: delete entry feature
+    TODO: update entry
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -264,18 +262,21 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
 
             // Add header row
             TableRow headerRow = new TableRow(this);
+            headerRow.setBackgroundColor(Color.parseColor("#c0c0c0"));
             headerRow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-            for (int i = 0; i < table.ColumnNames.length; i++) {
+            for (String t : table.ColumnNames) {
                 TextView tv = new TextView(this);
                 tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
                 //tv.setBackgroundResource(R.drawable.cell_shape);
                 tv.setGravity(Gravity.CENTER);
-                tv.setTextSize(20);
-                tv.setPadding(0, 5, 0, 5);
-                tv.setText(table.ColumnNames[i]);
+                tv.setTextSize(16);
+                tv.setPadding(5, 5, 5, 5);
+                tv.setText(t);
                 headerRow.addView(tv);
             }
             tableViewTable.addView(headerRow);
+
+            String log = "";
 
             // Fill table (row by row)
             for (int i = 0; i < table.Data.size(); i++) {
@@ -289,17 +290,23 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
 
                     TextView tv = new TextView(this);
                     tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-                    //tv.setBackgroundResource(R.drawable.cell_shape);
                     tv.setGravity(Gravity.CENTER);
                     tv.setTextSize(18);
                     tv.setPadding(0, 5, 0, 5);
                     tv.setText(rowData[j]);
 
+                    log += table.ColumnNames[j] + ": " + rowData[j] + ", ";
+
                     row.addView(tv);
                 }
 
+                log += "\n";
+
                 tableViewTable.addView(row);
             }
+
+            Log.d("", log);
+
         } catch (Exception ex) {
             OnException(ex, "Cannot show table " + table.Name);
         }
