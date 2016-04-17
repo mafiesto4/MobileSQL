@@ -16,7 +16,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // Database Info
     private static final String DATABASE_NAME = "database.db";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
 
     // Root table
     private static final String TABLE_ROOT = "root";
@@ -64,7 +64,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public void createTable(String name) {
         // Validate name
-        if (name == TABLE_ROOT)
+        if (name.compareTo(TABLE_ROOT) == 0)
             throw new InvalidParameterException("Invalid table name!");
 
         SQLiteDatabase db = getWritableDatabase();

@@ -1,5 +1,7 @@
 package figat.pl.mobilesql;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
@@ -11,19 +13,33 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.content.Context;
+import android.os.Parcelable;
+import android.util.AttributeSet;
+import android.util.SparseArray;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnClickListener;
+import android.view.ViewDebug.CapturedViewProperty;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.Adapter;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements IViewObject {
 
@@ -39,6 +55,13 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
     private ArrayList<String> tablesList;
     private ArrayAdapter<String> tablesListAdapter;
 
+    // Switching views
+    private View viewTablesList;
+    private View viewTableView;
+    private View currentView;
+    private View previousView;
+    private int mShortAnimationDuration;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +69,15 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        viewTablesList = findViewById(R.id.mainView);
+        viewTableView = findViewById(R.id.loading_spinner);
+        viewTableView.setVisibility(View.GONE);
+        currentView = viewTablesList;
+        previousView = null;
+        mShortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -59,10 +91,18 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
         // Tables list
-        tablesListView = (ListView)findViewById(R.id.listView);
+        tablesListView = (ListView) findViewById(R.id.listView);
         tablesList = new ArrayList<>();
         tablesListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, tablesList);
         tablesListView.setAdapter(tablesListAdapter);
+        tablesListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView parent, View view, int position, long id)
+            {
+                String item = tablesListAdapter.getItem(position);
+                Navigate(item);
+            }
+        });
 
         // Register view
         Controller.getInstance().LinkView(context, this);
@@ -151,6 +191,19 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            // Check if is viewing a table
+            if(currentView == viewTableView) {
+                crossfade(viewTablesList);
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
 
@@ -186,10 +239,16 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         client.disconnect();
     }
 
+    public void Navigate(String table)
+    {
+        Navigate(Controller.getInstance().GetModel().FindTable(table));
+    }
+
     @Override
     public void Navigate(Table table)
     {
-        new AlertDialog.Builder(context).setTitle("Navigate to...").setMessage(table.Name).show();
+        crossfade(viewTableView);
+        //new AlertDialog.Builder(context).setTitle("Navigate to...").setMessage(table.Name).show();
     }
 
     @Override
@@ -211,5 +270,41 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
     public void OnException(Exception ex, String info)
     {
         new AlertDialog.Builder(context).setTitle("Error").setMessage(info + "\n" + ex.getMessage()).show();
+    }
+
+    private void crossfade(View targetView) {
+
+        // Check if view won't change
+        if(targetView == currentView)
+            return;
+
+        // Set new current view
+        previousView = currentView;
+        currentView = targetView;
+
+        // Set the content view to 0% opacity but visible, so that it is visible
+        // (but fully transparent) during the animation.
+        currentView.setAlpha(0f);
+        currentView.setVisibility(View.VISIBLE);
+
+        // Animate the content view to 100% opacity, and clear any animation
+        // listener set on the view.
+        currentView.animate()
+                .alpha(1f)
+                .setDuration(mShortAnimationDuration)
+                .setListener(null);
+
+        // Animate the loading view to 0% opacity. After the animation ends,
+        // set its visibility to GONE as an optimization step (it won't
+        // participate in layout passes, etc.)
+        previousView.animate()
+                .alpha(0f)
+                .setDuration(mShortAnimationDuration)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        previousView.setVisibility(View.GONE);
+                    }
+                });
     }
 }
