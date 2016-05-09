@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
     // Switching views
     private View viewTablesList;
     private View viewTableView;
+    private View viewQueryView;
     private View currentView;
     private View previousView;
     private int mShortAnimationDuration;
@@ -52,13 +53,16 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
     // Table View
     private TableLayout tableViewTable;
 
+    // Query View
+    private TableLayout queryViewTable;
+    private EditText queryViewInput;
+
     /*
     TODO: exec sql page
     TODO: show exec sql result
     TODO: creating new entries dialog (or page)
-    TODO: delete table
-    TODO: delete entry feature
-    TODO: update entry
+    TODO: delete entry
+    TODO: create/update entry
      */
 
     @Override
@@ -70,7 +74,9 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         // View changing
         viewTablesList = findViewById(R.id.viewTablesList);
         viewTableView = findViewById(R.id.viewTableView);
+        viewQueryView = findViewById(R.id.viewQueryView);
         viewTableView.setVisibility(View.GONE);
+        viewQueryView.setVisibility(View.GONE);
         currentView = viewTablesList;
         previousView = null;
         mShortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
@@ -119,6 +125,16 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         tableViewToolbar.inflateMenu(R.menu.menu_table);
         getMenuInflater().inflate(R.menu.menu_table, tableViewToolbar.getMenu());
 
+        // Query View
+        queryViewTable = (TableLayout)findViewById(R.id.viewQueryViewTable);
+        queryViewInput = (EditText) findViewById(R.id.viewQueryViewInput);
+        (findViewById(R.id.viewQueryViewSearch)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                performQuery();
+            }
+        });
+
         // Register view
         Controller.getInstance().linkView(context, this);
     }
@@ -151,10 +167,73 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         new AlertDialog.Builder(context).setTitle("TODO").setMessage("TODO: create new table entry").show();
     }
 
+    private void performQuery() {
+        try {
+
+            // Try to get data
+            String sql = queryViewInput.getText().toString();
+            SqlQueryResult result = Controller.getInstance().getModel().performQuery(sql);
+
+            // Show result
+            updateTable(result, queryViewTable);
+        }
+        catch(Exception ex)
+        {
+            // Error
+            onException(ex, "Cannot query SQL.");
+        }
+    }
+
+    private void updateTable(SqlQueryResult sqlResult, TableLayout table)
+    {
+        // Clear previous data
+        table.removeAllViews();
+
+        // Add header row
+        TableRow headerRow = new TableRow(this);
+        headerRow.setBackgroundColor(Color.parseColor("#c0c0c0"));
+        headerRow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        for (String t : sqlResult.ColumnNames) {
+            TextView tv = new TextView(this);
+            //tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            //tv.setBackgroundResource(R.drawable.cell_shape);
+            tv.setGravity(Gravity.CENTER);
+            tv.setTextSize(16);
+            tv.setText(t);
+            tv.setPadding(3, 3, 3, 3);
+            headerRow.addView(tv);
+        }
+        table.addView(headerRow);
+
+        // Fill table (row by row)
+        for (int i = 0; i < sqlResult.Data.size(); i++) {
+
+            TableRow row = new TableRow(this);
+            //row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+            String[] rowData = sqlResult.Data.get(i);
+
+            // Add all columns
+            for (int j = 0; j < rowData.length; j++) {
+
+                TextView tv = new TextView(this);
+                //tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+                //tv.setGravity(Gravity.CENTER);
+                //tv.setTextSize(18);
+                tv.setPadding(3, 3, 3, 3);
+                tv.setText(rowData[j]);
+
+                row.addView(tv);
+            }
+
+            table.addView(row);
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         Toolbar tableViewToolbar = (Toolbar) findViewById(R.id.viewTableViewToolbar);
+
         if (tableViewToolbar.getMenu() == menu)
             getMenuInflater().inflate(R.menu.menu_table, menu);
         else
@@ -187,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
             return true;
         }
         if(id == R.id.action_querySql) {
-            new AlertDialog.Builder(context).setTitle("TODO").setMessage("TODO: show new query SQL dialog").show();
+            changeView(viewQueryView);
             return true;
         }
 
@@ -201,6 +280,11 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
             // Check if is viewing a table
             if(currentView == viewTableView) {
                 showTablesList();
+                return true;
+            }
+            else if(currentView == viewQueryView)
+            {
+                changeView(viewTableView);
                 return true;
             }
         }
@@ -252,7 +336,6 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
     @Override
     public void showTablesList() {
         changeView(viewTablesList);
-        /*setSupportActionBar((Toolbar)findViewById(R.id.viewTablesListToolbar));*/
     }
 
     @Override
@@ -268,52 +351,13 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         Toolbar toolbar = (Toolbar) findViewById(R.id.viewTableViewToolbar);
         toolbar.setTitle(table.Name);
 
-        // Clear previous table
-        tableViewTable.removeAllViews();
-
         try {
 
             // Get all table data
             Controller.getInstance().getModel().getTableData(table);
 
-            // Add header row
-            TableRow headerRow = new TableRow(this);
-            headerRow.setBackgroundColor(Color.parseColor("#c0c0c0"));
-            headerRow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-            for (String t : table.ColumnNames) {
-                TextView tv = new TextView(this);
-                //tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-                //tv.setBackgroundResource(R.drawable.cell_shape);
-                tv.setGravity(Gravity.CENTER);
-                tv.setTextSize(16);
-                tv.setText(t);
-                tv.setPadding(3, 3, 3, 3);
-                headerRow.addView(tv);
-            }
-            tableViewTable.addView(headerRow);
-
-            // Fill table (row by row)
-            for (int i = 0; i < table.Data.size(); i++) {
-
-                TableRow row = new TableRow(this);
-                //row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-                String[] rowData = table.Data.get(i);
-
-                // Add all columns
-                for (int j = 0; j < rowData.length; j++) {
-
-                    TextView tv = new TextView(this);
-                    //tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-                    //tv.setGravity(Gravity.CENTER);
-                    //tv.setTextSize(18);
-                    tv.setPadding(3, 3, 3, 3);
-                    tv.setText(rowData[j]);
-
-                    row.addView(tv);
-                }
-
-                tableViewTable.addView(row);
-            }
+           // Update table
+            updateTable(table.Cache, tableViewTable);
 
             // Clear data
             table.clearCache();

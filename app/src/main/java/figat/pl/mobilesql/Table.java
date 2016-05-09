@@ -5,19 +5,12 @@ import java.util.ArrayList;
 public class Table {
     
     public String Name;
-
-    // Temporary table data (may be released or not available always)
-    public int EntriesCount;
-    public String[] ColumnNames;
-    public ArrayList<String[]> Data;
+    public SqlQueryResult Cache;
 
     /**
      * Clears table cached data gathered from the database
      */
-    public void clearCache()
-    {
-        EntriesCount = -1;
-        ColumnNames = null;
-        Data = null;
+    public void clearCache() {
+        Cache = null;
     }
 }

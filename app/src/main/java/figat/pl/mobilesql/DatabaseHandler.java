@@ -45,7 +45,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
                         Table t = new Table();
                         t.Name = cursor.getString(cursor.getColumnIndexOrThrow(KEY_TABLE_NAME));
-                        t.EntriesCount = 0;
                         tables.add(t);
 
                     } while (cursor.moveToNext());

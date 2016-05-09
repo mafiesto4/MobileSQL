@@ -87,19 +87,19 @@ public class Model {
     }
 
     public void getTableData(Table table) {
+        table.Cache = performQuery("SELECT * FROM " + table.Name);
+    }
 
+    public SqlQueryResult performQuery(String sql)
+    {
         // Prepare
-        if (table.Data == null)
-            table.Data = new ArrayList<>();
-        else
-            table.Data.clear();
-
+        SqlQueryResult result = new SqlQueryResult();
         SQLiteDatabase db = handler.getReadableDatabase();
 
         // Gather all tables entries
-        Cursor cursor = db.rawQuery("SELECT * FROM " + table.Name, null);
-        table.ColumnNames = cursor.getColumnNames();
-        table.EntriesCount = cursor.getCount();
+        Cursor cursor = db.rawQuery(sql, null);
+        result.ColumnNames = cursor.getColumnNames();
+        result.EntriesCount = cursor.getCount();
 
         try {
             if (cursor.moveToFirst()) {
@@ -114,7 +114,7 @@ public class Model {
                     for (int col = 0; col < columns; col++)
                         rowData[col] = cursor.getString(col);
 
-                    table.Data.add(rowData);
+                    result.Data.add(rowData);
 
                     if (!cursor.moveToNext())
                         break;
@@ -130,5 +130,6 @@ public class Model {
         }
 
         db.close();
+        return result;
     }
 }
