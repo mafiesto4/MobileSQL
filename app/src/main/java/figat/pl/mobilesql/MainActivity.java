@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,9 +53,6 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
     private TableLayout tableViewTable;
 
     /*
-    TODO: navigation bar conetxxt menu for table view page
-    TODO: navigation icon back for table view page
-    TODO: show table list
     TODO: exec sql page
     TODO: show exec sql result
     TODO: creating new entries dialog (or page)
@@ -98,6 +96,8 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         });
         Toolbar tableListToolbar = (Toolbar)findViewById(R.id.viewTablesListToolbar);
         setSupportActionBar(tableListToolbar);
+        tableListToolbar.setNavigationIcon(R.drawable.ic_action_database);
+        getMenuInflater().inflate(R.menu.menu_main, tableListToolbar.getMenu());
 
         // Table View
         tableViewTable = (TableLayout)findViewById(R.id.viewTableViewTable);
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
             }
         });
         Toolbar tableViewToolbar = (Toolbar)findViewById(R.id.viewTableViewToolbar);
-        tableViewToolbar.inflateMenu(R.menu.menu_table);
+        setSupportActionBar(tableViewToolbar);
         tableViewToolbar.setNavigationIcon(R.drawable.ic_action_arrow_left);
         tableViewToolbar.setNavigationOnClickListener(new OnClickListener() {
             @Override
@@ -116,6 +116,8 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
                 showTablesList();
             }
         });
+        tableViewToolbar.inflateMenu(R.menu.menu_table);
+        getMenuInflater().inflate(R.menu.menu_table, tableViewToolbar.getMenu());
 
         // Register view
         Controller.getInstance().linkView(context, this);
@@ -151,8 +153,13 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        Toolbar tableViewToolbar = (Toolbar) findViewById(R.id.viewTableViewToolbar);
+        if (tableViewToolbar.getMenu() == menu)
+            getMenuInflater().inflate(R.menu.menu_table, menu);
+        else
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+
         return true;
     }
 
@@ -250,7 +257,6 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         // Navigate to that view
         changeView(viewTableView);
         Toolbar toolbar = (Toolbar) findViewById(R.id.viewTableViewToolbar);
-        setSupportActionBar(toolbar);
         toolbar.setTitle(table.Name);
 
         // Clear previous table
@@ -329,7 +335,7 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
     private void showTablesList()
     {
         changeView(viewTablesList);
-        setSupportActionBar((Toolbar)findViewById(R.id.viewTablesListToolbar));
+        /*setSupportActionBar((Toolbar)findViewById(R.id.viewTablesListToolbar));*/
     }
 
     private void changeView(View targetView) {

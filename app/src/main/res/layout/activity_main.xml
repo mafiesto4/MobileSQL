@@ -71,13 +71,13 @@
         android:fitsSystemWindows="true"
         android:id="@+id/viewTableView"
         tools:context="figat.pl.mobilesql.MainActivity"
-        >
+        android:contextClickable="true">
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay"
-            android:contextClickable="false"
+            android:contextClickable="true"
             android:clickable="true">
 
             <android.support.v7.widget.Toolbar
