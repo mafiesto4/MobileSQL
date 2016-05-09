@@ -194,6 +194,7 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
                 return true;
             }
         }
+
         return super.onKeyDown(keyCode, event);
     }
 
@@ -266,46 +267,38 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
             headerRow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
             for (String t : table.ColumnNames) {
                 TextView tv = new TextView(this);
-                tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+                //tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
                 //tv.setBackgroundResource(R.drawable.cell_shape);
                 tv.setGravity(Gravity.CENTER);
                 tv.setTextSize(16);
-                tv.setPadding(5, 5, 5, 5);
                 tv.setText(t);
+                tv.setPadding(3, 3, 3, 3);
                 headerRow.addView(tv);
             }
             tableViewTable.addView(headerRow);
-
-            String log = "";
 
             // Fill table (row by row)
             for (int i = 0; i < table.Data.size(); i++) {
 
                 TableRow row = new TableRow(this);
-                row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+                //row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
                 String[] rowData = table.Data.get(i);
 
                 // Add all columns
                 for (int j = 0; j < rowData.length; j++) {
 
                     TextView tv = new TextView(this);
-                    tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-                    tv.setGravity(Gravity.CENTER);
-                    tv.setTextSize(18);
-                    tv.setPadding(0, 5, 0, 5);
+                    //tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+                    //tv.setGravity(Gravity.CENTER);
+                    //tv.setTextSize(18);
+                    tv.setPadding(3, 3, 3, 3);
                     tv.setText(rowData[j]);
-
-                    log += table.ColumnNames[j] + ": " + rowData[j] + ", ";
 
                     row.addView(tv);
                 }
 
-                log += "\n";
-
                 tableViewTable.addView(row);
             }
-
-            Log.d("", log);
 
         } catch (Exception ex) {
             OnException(ex, "Cannot show table " + table.Name);
