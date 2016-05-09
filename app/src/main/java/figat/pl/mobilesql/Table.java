@@ -1,7 +1,6 @@
 package figat.pl.mobilesql;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Table {
     
@@ -11,4 +10,14 @@ public class Table {
     public int EntriesCount;
     public String[] ColumnNames;
     public ArrayList<String[]> Data;
+
+    /**
+     * Clears table cached data gathered from the database
+     */
+    public void clearCache()
+    {
+        EntriesCount = -1;
+        ColumnNames = null;
+        Data = null;
+    }
 }

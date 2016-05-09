@@ -89,6 +89,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void deleteTable(String name) {
+        // Validate name
+        if (name.compareTo(TABLE_ROOT) == 0)
+            throw new InvalidParameterException("Invalid table name!");
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.execSQL("DROP TABLE IF EXISTS " + name);
+
+        db.close();
+    }
+
     private static boolean isTableExists(SQLiteDatabase db, String tableName) {
         if (tableName == null || db == null || !db.isOpen()) {
             return false;

@@ -20,9 +20,13 @@ public class Controller {
         model = new Model(context);
         view = viewObj;
 
-        view.OnTablesModified();
+        view.onTablesModified();
     }
 
+    /***
+     * Gets model object
+     * @return Model object
+     */
     public Model getModel()
     {
         return model;
@@ -39,7 +43,7 @@ public class Controller {
             Table table = model.findTable(name);
             if (table != null) {
                 // Error
-                view.OnTableAlreadyExists();
+                view.onTableAlreadyExists();
                 return;
             }
 
@@ -47,15 +51,46 @@ public class Controller {
             table = model.createTable(name);
 
             // Refresh tables list
-            view.OnTablesModified();
+            view.onTablesModified();
 
             // Navigate to that table
-            view.Navigate(table);
+            view.navigate(table);
         }
         catch(Exception ex)
         {
             // Error
-            view.OnException(ex, "Cannot create new table.");
+            view.onException(ex, "Cannot create new table.");
+        }
+    }
+
+    /**
+     * Deletes existing sql database table
+     * @param name New table name
+     */
+    public void deleteTable(String name) {
+
+        try {
+            // Find table by name
+            Table table = model.findTable(name);
+            if (table == null) {
+                // Error
+                view.onMissingTable();
+                return;
+            }
+
+            // Remove table from the model database
+            model.deleteTable(table);
+
+            // Refresh tables list
+            view.onTablesModified();
+
+            // Navigate to tables list
+            view.showTablesList();
+        }
+        catch(Exception ex)
+        {
+            // Error
+            view.onException(ex, "Cannot delete table.");
         }
     }
 }

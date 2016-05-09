@@ -57,7 +57,6 @@ public class Model {
 
     /**
      * Creates new sql database table
-     *
      * @param name New table name
      * @return New table
      */
@@ -72,6 +71,19 @@ public class Model {
         tables.add(table);
 
         return table;
+    }
+
+    /**
+     * Deletes sql table
+     * @param table Table to remove
+     */
+    public void deleteTable(Table table) {
+
+        // Delete SQL table
+        handler.deleteTable(table.Name);
+
+        // Remove table entry
+        tables.remove(table);
     }
 
     public void getTableData(Table table) {

@@ -2,11 +2,15 @@ package figat.pl.mobilesql;
 
 public interface IViewObject {
 
-    void Navigate(Table table);
+    void showTablesList();
 
-    void OnTableAlreadyExists();
+    void navigate(Table table);
 
-    void OnTablesModified();
+    void onTableAlreadyExists();
 
-    void OnException(Exception ex, String info);
+    void onMissingTable();
+
+    void onTablesModified();
+
+    void onException(Exception ex, String info);
 }

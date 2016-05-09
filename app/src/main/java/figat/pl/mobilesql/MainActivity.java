@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
             public void onItemClick(AdapterView parent, View view, int position, long id)
             {
                 String item = tablesListAdapter.getItem(position);
-                Navigate(item);
+                navigate(item);
             }
         });
         (findViewById(R.id.viewTablesListAdd)).setOnClickListener(new View.OnClickListener() {
@@ -176,7 +176,10 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
             return true;
         }
         if(id == R.id.action_deleteTable) {
-            new AlertDialog.Builder(context).setTitle("TODO").setMessage("TODO: delete current table").show();
+
+            Toolbar toolbar = (Toolbar) findViewById(R.id.viewTableViewToolbar);
+            String name = toolbar.getTitle().toString();
+            Controller.getInstance().deleteTable(name);
             return true;
         }
         if(id == R.id.action_newEntry) {
@@ -213,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
         Action viewAction = Action.newAction(Action.TYPE_VIEW, // TODO: choose an action type.
-                "Main Page", // TODO: Define a title for the content shown.
+                "Tables List", // TODO: Define a title for the content shown.
                 // TODO: If you have web page content that matches this app activity's content,
                 // make sure this auto-generated web page URL is correct.
                 // Otherwise, set the URL to null.
@@ -230,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         Action viewAction = Action.newAction(Action.TYPE_VIEW, // TODO: choose an action type.
-                "Main Page", // TODO: Define a title for the content shown.
+                "Tables List", // TODO: Define a title for the content shown.
                 // TODO: If you have web page content that matches this app activity's content,
                 // make sure this auto-generated web page URL is correct.
                 // Otherwise, set the URL to null.
@@ -241,13 +244,19 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         client.disconnect();
     }
 
-    public void Navigate(String table)
+    public void navigate(String table)
     {
-        Navigate(Controller.getInstance().getModel().findTable(table));
+        navigate(Controller.getInstance().getModel().findTable(table));
     }
 
     @Override
-    public void Navigate(Table table) {
+    public void showTablesList() {
+        changeView(viewTablesList);
+        /*setSupportActionBar((Toolbar)findViewById(R.id.viewTablesListToolbar));*/
+    }
+
+    @Override
+    public void navigate(Table table) {
         // Check if show default page
         if (table == null) {
             showTablesList();
@@ -306,19 +315,28 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
                 tableViewTable.addView(row);
             }
 
+            // Clear data
+            table.clearCache();
+
         } catch (Exception ex) {
-            OnException(ex, "Cannot show table " + table.Name);
+            onException(ex, "Cannot show table " + table.Name);
         }
     }
 
     @Override
-    public void OnTableAlreadyExists()
+    public void onTableAlreadyExists()
     {
         new AlertDialog.Builder(context).setTitle("Error").setMessage("Table with that name already exists!").show();
     }
 
     @Override
-    public void OnTablesModified() {
+    public void onMissingTable()
+    {
+        new AlertDialog.Builder(context).setTitle("Error").setMessage("Missing table!").show();
+    }
+
+    @Override
+    public void onTablesModified() {
         tablesList.clear();
         Model model = Controller.getInstance().getModel();
         for (int i = 0; i < model.getTablesCount(); i++)
@@ -327,15 +345,9 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
     }
 
     @Override
-    public void OnException(Exception ex, String info)
+    public void onException(Exception ex, String info)
     {
         new AlertDialog.Builder(context).setTitle("Error").setMessage(info + "\n" + ex.getMessage()).show();
-    }
-
-    private void showTablesList()
-    {
-        changeView(viewTablesList);
-        /*setSupportActionBar((Toolbar)findViewById(R.id.viewTablesListToolbar));*/
     }
 
     private void changeView(View targetView) {
