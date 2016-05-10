@@ -59,8 +59,6 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
     private EditText queryViewInput;
 
     /*
-    TODO: exec sql page
-    TODO: show exec sql result
     TODO: creating new entries dialog (or page)
     TODO: delete entry
     TODO: create/update entry
