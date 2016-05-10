@@ -3,13 +3,21 @@
     <item
         android:id="@+id/action_querySql"
         android:orderInCategory="1100"
-        android:title="@string/querySql" />
+        android:title="@string/querySql"
+        />
     <item
         android:id="@+id/action_newEntry"
         android:orderInCategory="1200"
-        android:title="@string/newEntry" />
+        android:title="@string/newEntry"
+        />
+    <item
+        android:id="@+id/action_newColumn"
+        android:orderInCategory="1900"
+        android:title="@string/newColumn"
+        />
     <item
         android:id="@+id/action_deleteTable"
         android:orderInCategory="1900"
-        android:title="@string/deleteTable"/>
+        android:title="@string/deleteTable"
+        />
 </menu>

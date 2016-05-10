@@ -24,9 +24,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -265,6 +268,34 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         return true;
     }
 
+    private void newColumn()
+    {
+        // Setup a dialog window
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        View promptView = layoutInflater.inflate(R.layout.new_column, null);
+        alertDialogBuilder.setView(promptView);
+        final EditText input = (EditText) promptView.findViewById(R.id.newColumnName);
+        final Spinner newColumnType = (Spinner)promptView.findViewById(R.id.newColumnType);
+        alertDialogBuilder.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+                String columnName = input.getText().toString();
+                String columnType = (String)newColumnType.getSelectedItem();
+                Controller.getInstance().addColumn(lastTableName, columnName, columnType);
+
+            }
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertD = alertDialogBuilder.create();
+
+        // Show it
+        alertD.show();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -283,6 +314,10 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         }
         if(id == R.id.action_newEntry) {
             showAddEntry();
+            return true;
+        }
+        if(id== R.id.action_newColumn) {
+            newColumn();
             return true;
         }
         if(id == R.id.action_querySql) {

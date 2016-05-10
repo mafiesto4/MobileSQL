@@ -14,6 +14,7 @@ public class Model {
 
     /**
      * Gets amount of tables
+     *
      * @return Amount of tables in a database
      */
     public int getTablesCount() {
@@ -22,6 +23,7 @@ public class Model {
 
     /***
      * Gets table at given index
+     *
      * @param index Table index
      * @return Table
      */
@@ -31,6 +33,7 @@ public class Model {
 
     /**
      * Init
+     *
      * @param context Application context
      */
     public Model(Context context) {
@@ -42,6 +45,7 @@ public class Model {
 
     /**
      * Tries to find table with given name
+     *
      * @param name Table name to find
      * @return Found table or null
      */
@@ -58,6 +62,7 @@ public class Model {
 
     /**
      * Creates new SQL database table
+     *
      * @param name New table name
      * @return New table
      */
@@ -76,6 +81,7 @@ public class Model {
 
     /**
      * Deletes SQL table
+     *
      * @param table Table to remove
      */
     public void deleteTable(Table table) {
@@ -89,6 +95,7 @@ public class Model {
 
     /**
      * Perform query to the database to gather table data to teh cache
+     *
      * @param table Tabe to update
      */
     public void getTableData(Table table) {
@@ -97,11 +104,11 @@ public class Model {
 
     /**
      * Performs SQL query to the database
+     *
      * @param sql SQL query text
      * @return Query result
      */
-    public SqlQueryResult performQuery(String sql)
-    {
+    public SqlQueryResult performQuery(String sql) {
         // Prepare
         SqlQueryResult result = new SqlQueryResult();
         SQLiteDatabase db = handler.getReadableDatabase();
@@ -141,5 +148,20 @@ public class Model {
 
         db.close();
         return result;
+    }
+
+    /***
+     * Add new column to the table
+     * @param table      Table
+     * @param columnName Column name
+     * @param columnType Column type
+     */
+    public void addColumn(Table table, String columnName, String columnType) {
+
+        SQLiteDatabase db = handler.getWritableDatabase();
+
+        db.execSQL("ALTER TABLE " + table.Name + " ADD COLUMN " + columnName + " " + columnType + ";");
+
+        db.close();
     }
 }

@@ -97,4 +97,34 @@ public class Controller {
             view.onException(ex, "Cannot delete table.");
         }
     }
+
+    /***
+     * Add new column to the table
+     * @param tableName Table name
+     * @param columnName Column name
+     * @param columnType Column type
+     */
+    public void addColumn(String tableName, String columnName, String columnType) {
+
+        try {
+            // Find table by name
+            Table table = model.findTable(tableName);
+            if (table == null) {
+                // Error
+                view.onMissingTable();
+                return;
+            }
+
+            // Add column
+            model.addColumn(table, columnName, columnType);
+
+            // Refresh table
+            view.navigate(table);
+        }
+        catch(Exception ex)
+        {
+            // Error
+            view.onException(ex, "Cannot add column.");
+        }
+    }
 }
