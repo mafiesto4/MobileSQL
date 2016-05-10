@@ -97,10 +97,21 @@ public class Model {
     /**
      * Perform query to the database to gather table data to teh cache
      *
-     * @param table Tabe to update
+     * @param table Table to update
      */
     public void getTableData(Table table) {
         table.cache = performQuery("SELECT * FROM " + table.name);
+    }
+
+    /***
+     * Perform raw SQL query to teh database
+     * @param sql SQL query text
+     */
+    public void rawQuery(String sql)
+    {
+        SQLiteDatabase db = handler.getWritableDatabase();
+        db.execSQL(sql);
+        db.close();
     }
 
     /**
@@ -215,14 +226,15 @@ public class Model {
         db.close();
     }
 
+    /**
+     * Add row to teh table with default values
+     * @param table Table to modify
+     */
     public void addRow(Table table)
     {
         SQLiteDatabase db = handler.getWritableDatabase();
 
         db.execSQL("INSERT INTO " + table.name + " DEFAULT VALUES");
-
-        //ContentValues values = new ContentValues();
-        //db.insertOrThrow(table.name, null, values);
 
         db.close();
     }

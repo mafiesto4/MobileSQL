@@ -1,6 +1,7 @@
 package figat.pl.mobilesql;
 
 import android.content.Context;
+import android.util.Log;
 
 public class Controller {
 
@@ -158,6 +159,10 @@ public class Controller {
         }
     }
 
+    /**
+     * Add row with default value to the table
+     * @param tableName Table name
+     */
     public void addRow(String tableName)
     {
         try {
@@ -179,6 +184,46 @@ public class Controller {
         {
             // Error
             view.onException(ex, "Cannot add row.");
+        }
+    }
+
+    /**
+     * Remove row from the table
+     * @param tableName Table name
+     * @param index     Zero-based row index
+     */
+    public void deleteRow(String tableName, int index)
+    {
+        try {
+            // Find table by name
+            Table table = model.findTable(tableName);
+            if (table == null) {
+                // Error
+                view.onMissingTable();
+                return;
+            }
+
+            // Get table data
+            model.getTableData(table);
+
+            // Create row values string
+            String row = "";
+            for(int column = 0; column < table.cache.ColumnNames.length; column++) {
+                if(column != 0)
+                    row += " AND ";
+                row += table.cache.ColumnNames[column] + " = \'" + table.cache.Data.get(index)[column] + "\'";
+            }
+            
+            // Remove row
+            model.rawQuery("DELETE FROM " + table.name + " WHERE " + row);
+
+            // Refresh table
+            view.navigate(table);
+        }
+        catch(Exception ex)
+        {
+            // Error
+            view.onException(ex, "Cannot delete row.");
         }
     }
 }

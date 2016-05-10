@@ -62,8 +62,9 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
     private EditText queryViewInput;
 
     /*
-    TODO: creating new entries dialog (or page)
     TODO: delete entry
+    TODO: remove column
+    TODO: primary keys
     TODO: create/update entry
      */
 
@@ -227,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
 
     private void deleteRow(SqlTableText cell)
     {
-
+        Controller.getInstance().deleteRow(lastTableName, cell.rowIndex);
     }
 
     private void updateTable(SqlQueryResult sqlResult, TableLayout table, boolean allowEdit)
