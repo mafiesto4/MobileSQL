@@ -5,13 +5,13 @@ package figat.pl.mobilesql;
  */
 public class Table {
     
-    public String Name;
-    public SqlQueryResult Cache;
+    public String name;
+    public SqlQueryResult cache;
 
     /**
      * Clears table cached data gathered from the database
      */
     public void clearCache() {
-        Cache = null;
+        cache = null;
     }
 }

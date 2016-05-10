@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
 
     private void showAddEntry()
     {
-        new AlertDialog.Builder(context).setTitle("TODO").setMessage("TODO: create new table entry").show();
+        Controller.getInstance().addRow(lastTableName);
     }
 
     private void performQuery() {
@@ -183,7 +183,15 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
             SqlQueryResult result = Controller.getInstance().getModel().performQuery(sql);
 
             // Show result
-            updateTable(result, queryViewTable);
+            updateTable(result, queryViewTable, false);
+
+            // Update current table (it can be changed during this query)
+            Table table = Controller.getInstance().getModel().findTable(lastTableName);
+            if(table != null) {
+                Controller.getInstance().getModel().getTableData(table);
+                updateTable(table.cache, tableViewTable, true);
+                table.clearCache();
+            }
         }
         catch(Exception ex)
         {
@@ -192,7 +200,37 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         }
     }
 
-    private void updateTable(SqlQueryResult sqlResult, TableLayout table)
+    private void editCell(SqlTableText cell)
+    {
+        // Setup a dialog window
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        View promptView = layoutInflater.inflate(R.layout.edit_row, null);
+        alertDialogBuilder.setView(promptView);
+        final EditText input = (EditText) promptView.findViewById(R.id.userInput);
+        input.setText(cell.getText());
+        alertDialogBuilder.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                new AlertDialog.Builder(context).setTitle("Edit").setMessage("new value: " + input.getText()).show();
+                //Controller.getInstance().createTable(input.getText().toString());
+            }
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertD = alertDialogBuilder.create();
+
+        // Show it
+        alertD.show();
+    }
+
+    private void deleteRow(SqlTableText cell)
+    {
+
+    }
+
+    private void updateTable(SqlQueryResult sqlResult, TableLayout table, boolean allowEdit)
     {
         // Clear previous data
         table.removeAllViews();
@@ -209,6 +247,31 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
             tv.setTextSize(16);
             tv.setText(t);
             tv.setPadding(3, 3, 3, 3);
+
+            // TODO: finish removing columns
+            /*if(allowEdit) {
+                tv.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View var1) {
+                        final String columnName = ((TextView) var1).getText().toString();
+                        final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which) {
+                                    case DialogInterface.BUTTON_POSITIVE:
+                                        Controller.getInstance().removeColumn(lastTableName, columnName);
+                                        break;
+                                }
+                            }
+                        };
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setMessage("Delete column \'" + columnName + "\'?\nThis action cannot be undone.")
+                                .setPositiveButton("OK", dialogClickListener)
+                                .setNegativeButton("Cancel", dialogClickListener).show();
+                        return true;
+                    }
+                });
+            }*/
             headerRow.addView(tv);
         }
         table.addView(headerRow);
@@ -223,12 +286,42 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
             // Add all columns
             for (int j = 0; j < rowData.length; j++) {
 
-                TextView tv = new TextView(this);
+                SqlTableText tv = new SqlTableText(this);
+                tv.rowIndex = i;
+                tv.columnIndex = j;
                 //tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
                 //tv.setGravity(Gravity.CENTER);
                 //tv.setTextSize(18);
                 tv.setPadding(3, 3, 3, 3);
                 tv.setText(rowData[j]);
+
+                if(allowEdit) {
+                    tv.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View var1) {
+                            final SqlTableText cell = (SqlTableText) var1;
+                            final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which) {
+                                        case DialogInterface.BUTTON_POSITIVE:
+                                           editCell(cell);
+                                            break;
+                                        case DialogInterface.BUTTON_NEUTRAL:
+                                            deleteRow(cell);
+                                            break;
+                                    }
+                                }
+                            };
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                            builder.setMessage("Edit row")
+                                    .setPositiveButton("Edit", dialogClickListener)
+                                    .setNeutralButton("Delete", dialogClickListener)
+                                    .setNegativeButton("Cancel", dialogClickListener).show();
+                            return true;
+                        }
+                    });
+                }
 
                 row.addView(tv);
             }
@@ -276,13 +369,42 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         View promptView = layoutInflater.inflate(R.layout.new_column, null);
         alertDialogBuilder.setView(promptView);
         final EditText input = (EditText) promptView.findViewById(R.id.newColumnName);
+
+        class ColumnType
+        {
+            public String typeName;
+            public String defaultValue;
+
+            ColumnType(String t, String d)
+            {
+                typeName = t;
+                defaultValue = d;
+            }
+
+            @Override
+            public String toString()
+            {
+                return typeName;
+            }
+        };
+        ColumnType[] columns = new ColumnType[]
+                {
+                        new ColumnType("INT", "o"),
+                        new ColumnType("DATE", "\'2000-00-00\'"),
+                        new ColumnType("VARCHAR", "\'?\'"),
+                };
+
         final Spinner newColumnType = (Spinner)promptView.findViewById(R.id.newColumnType);
+        ArrayAdapter<ColumnType> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, columns);
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        newColumnType.setAdapter(spinnerArrayAdapter);
+
         alertDialogBuilder.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
 
                 String columnName = input.getText().toString();
-                String columnType = (String)newColumnType.getSelectedItem();
-                Controller.getInstance().addColumn(lastTableName, columnName, columnType);
+                ColumnType selectedType = (ColumnType)newColumnType.getSelectedItem();
+                Controller.getInstance().addColumn(lastTableName, columnName, selectedType.typeName, selectedType.defaultValue);
 
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -367,10 +489,10 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         }
 
         // Navigate to table view
-        lastTableName = table.Name;
+        lastTableName = table.name;
         changeView(viewTableView);
         Toolbar toolbar = (Toolbar) findViewById(R.id.viewTableViewToolbar);
-        toolbar.setTitle(table.Name);
+        toolbar.setTitle(table.name);
 
         try {
 
@@ -378,13 +500,13 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
             Controller.getInstance().getModel().getTableData(table);
 
            // Update table
-            updateTable(table.Cache, tableViewTable);
+            updateTable(table.cache, tableViewTable, true);
 
             // Clear data
             table.clearCache();
 
         } catch (Exception ex) {
-            onException(ex, "Cannot show table " + table.Name);
+            onException(ex, "Cannot show table " + table.name);
         }
     }
 
@@ -405,7 +527,7 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         tablesList.clear();
         Model model = Controller.getInstance().getModel();
         for (int i = 0; i < model.getTablesCount(); i++)
-            tablesList.add(model.getTable(i).Name);
+            tablesList.add(model.getTable(i).name);
         tablesListAdapter.notifyDataSetChanged();
     }
 

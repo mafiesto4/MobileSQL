@@ -100,11 +100,12 @@ public class Controller {
 
     /***
      * Add new column to the table
-     * @param tableName Table name
-     * @param columnName Column name
-     * @param columnType Column type
+     * @param tableName    Table name
+     * @param columnName   Column name
+     * @param columnType   Column type
+     * @param defaultValue Default value
      */
-    public void addColumn(String tableName, String columnName, String columnType) {
+    public void addColumn(String tableName, String columnName, String columnType, String defaultValue) {
 
         try {
             // Find table by name
@@ -116,7 +117,7 @@ public class Controller {
             }
 
             // Add column
-            model.addColumn(table, columnName, columnType);
+            model.addColumn(table, columnName, columnType, defaultValue);
 
             // Refresh table
             view.navigate(table);
@@ -125,6 +126,59 @@ public class Controller {
         {
             // Error
             view.onException(ex, "Cannot add column.");
+        }
+    }
+
+    /***
+     * Remove column from the table
+     * @param tableName Table name
+     * @param columnName Column name
+     */
+    public void removeColumn(String tableName, String columnName) {
+
+        try {
+            // Find table by name
+            Table table = model.findTable(tableName);
+            if (table == null) {
+                // Error
+                view.onMissingTable();
+                return;
+            }
+
+            // Remove column
+            model.removeColumn(table, columnName);
+
+            // Refresh table
+            view.navigate(table);
+        }
+        catch(Exception ex)
+        {
+            // Error
+            view.onException(ex, "Cannot remove column.");
+        }
+    }
+
+    public void addRow(String tableName)
+    {
+        try {
+            // Find table by name
+            Table table = model.findTable(tableName);
+            if (table == null) {
+                // Error
+                view.onMissingTable();
+                return;
+            }
+
+            // Add row
+            model.addRow(table);
+
+            // Refresh table
+            view.navigate(table);
+        }
+        catch(Exception ex)
+        {
+            // Error
+            view.onException(ex, "Cannot add row.");
         }
     }
 }

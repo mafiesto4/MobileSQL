@@ -3,17 +3,11 @@
 
     <string name="action_exit">Exit</string>
     <string name="input_new_table">Enter new table name</string>
-    <string name="input_new_column">Enter new column name</string>
+    <string name="input_cell_value">Enter cell value</string>
+    <string name="new_column">Create new column</string>
     <string name="input_new_columnType">Type</string>
     <string name="querySql">Query SQL</string>
     <string name="newEntry">New entry</string>
     <string name="newColumn">New column</string>
     <string name="deleteTable">Delete table</string>
-
-    <string-array name="columnTypes">
-        <item>INT</item>
-        <item>DATE</item>
-        <item>CHAR(30)</item>
-        <item>CHAR(250)</item>
-    </string-array>
 </resources>

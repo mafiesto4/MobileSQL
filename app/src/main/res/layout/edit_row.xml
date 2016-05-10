@@ -10,24 +10,17 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/new_column"
+        android:text="@string/input_cell_value"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:id="@+id/newColumnName"
+        android:id="@+id/userInput"
         android:layout_width="match_parent"
         android:inputType="text"
-        android:text="Col1"
         android:layout_height="wrap_content" >
 
         <requestFocus />
 
     </EditText>
-
-    <Spinner
-        android:id="@+id/newColumnType"
-        android:prompt="@string/input_new_columnType"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
 
 </LinearLayout>

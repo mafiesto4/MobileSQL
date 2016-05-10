@@ -1,5 +1,6 @@
 package figat.pl.mobilesql;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -52,7 +53,7 @@ public class Model {
     public Table findTable(String name) {
         Table result = null;
         for (int i = 0; i < tables.size(); i++) {
-            if (tables.get(i).Name.compareTo(name) == 0) {
+            if (tables.get(i).name.compareTo(name) == 0) {
                 result = tables.get(i);
                 break;
             }
@@ -73,7 +74,7 @@ public class Model {
 
         // Create table entry
         Table table = new Table();
-        table.Name = name;
+        table.name = name;
         tables.add(table);
 
         return table;
@@ -87,7 +88,7 @@ public class Model {
     public void deleteTable(Table table) {
 
         // Delete SQL table
-        handler.deleteTable(table.Name);
+        handler.deleteTable(table.name);
 
         // Remove table entry
         tables.remove(table);
@@ -99,7 +100,7 @@ public class Model {
      * @param table Tabe to update
      */
     public void getTableData(Table table) {
-        table.Cache = performQuery("SELECT * FROM " + table.Name);
+        table.cache = performQuery("SELECT * FROM " + table.name);
     }
 
     /**
@@ -111,7 +112,7 @@ public class Model {
     public SqlQueryResult performQuery(String sql) {
         // Prepare
         SqlQueryResult result = new SqlQueryResult();
-        SQLiteDatabase db = handler.getReadableDatabase();
+        SQLiteDatabase db = handler.getWritableDatabase();
 
         // Gather all tables entries
         Cursor cursor = db.rawQuery(sql, null);
@@ -152,15 +153,76 @@ public class Model {
 
     /***
      * Add new column to the table
-     * @param table      Table
-     * @param columnName Column name
-     * @param columnType Column type
+     * @param table        Table
+     * @param columnName   Column name
+     * @param columnType   Column type
+     * @param defaultValue Default value
      */
-    public void addColumn(Table table, String columnName, String columnType) {
+    public void addColumn(Table table, String columnName, String columnType, String defaultValue) {
 
         SQLiteDatabase db = handler.getWritableDatabase();
 
-        db.execSQL("ALTER TABLE " + table.Name + " ADD COLUMN " + columnName + " " + columnType + ";");
+        db.execSQL("ALTER TABLE " + table.name + " ADD COLUMN " + columnName + " " + columnType + " DEFAULT " + defaultValue);
+
+        db.close();
+    }
+
+    /***
+     * Remove column to the table
+     * @param table      Table
+     * @param columnName Column name
+     */
+    public void removeColumn(Table table, String columnName) {
+
+        getTableData(table);
+
+        // Create string from column names to keep in table
+        String keepColumns = "";
+        for(String column : table.cache.ColumnNames)
+        {
+            if (column.compareTo(columnName) != 0) {
+                if(keepColumns.length() != 0)
+                    keepColumns += ",";
+                keepColumns += column;
+            }
+        }
+
+        table.clearCache();
+
+        SQLiteDatabase db = handler.getWritableDatabase();
+
+        //db.beginTransaction();
+
+        db.execSQL(
+                /*"CREATE TABLE _backup AS (SELECT " + keepColumns + " FROM " + table.name + ");\n" +
+                "DROP " + table.name + ";\n"+
+                "ALTER TABLE _backup RENAME TO " + table.name*/
+
+                "ALTER TABLE " + table.name + " DROP COLUMN " + columnName
+
+                /*"CREATE TEMPORARY TABLE _backup(" + keepColumns + ");\n" +
+                "INSERT INTO _backup SELECT " + keepColumns + " FROM " + table.name + ";\n" +
+                "DROP TABLE " + table.name + ";\n" +
+                "CREATE TABLE " + table.name + "(" + keepColumns + ");\n" +
+                "INSERT INTO " + table.name + " SELECT " + keepColumns + " FROM _backup;\n" +
+                "DROP TABLE _backup;\n"*/
+
+                );
+
+        //db.setTransactionSuccessful();
+        //db.endTransaction();
+
+        db.close();
+    }
+
+    public void addRow(Table table)
+    {
+        SQLiteDatabase db = handler.getWritableDatabase();
+
+        db.execSQL("INSERT INTO " + table.name + " DEFAULT VALUES");
+
+        //ContentValues values = new ContentValues();
+        //db.insertOrThrow(table.name, null, values);
 
         db.close();
     }

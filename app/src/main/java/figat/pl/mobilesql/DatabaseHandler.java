@@ -49,7 +49,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     do {
 
                         Table t = new Table();
-                        t.Name = cursor.getString(cursor.getColumnIndexOrThrow(KEY_TABLE_NAME));
+                        t.name = cursor.getString(cursor.getColumnIndexOrThrow(KEY_TABLE_NAME));
                         tables.add(t);
 
                     } while (cursor.moveToNext());
@@ -78,7 +78,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
 
         db.execSQL("DROP TABLE IF EXISTS " + name);
-        db.execSQL("CREATE TABLE " + name + "( Dummy INTEGER );");
+        db.execSQL("CREATE TABLE " + name + "( Dummy INTEGER DEFAULT 0 );");
         
         db.beginTransaction();
         try {
