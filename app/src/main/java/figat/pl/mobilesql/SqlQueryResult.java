@@ -3,7 +3,7 @@ package figat.pl.mobilesql;
 import java.util.ArrayList;
 
 /**
- * Created by Wojtek on 2016-05-09.
+ * Contains result data of query to the database
  */
 public class SqlQueryResult {
 

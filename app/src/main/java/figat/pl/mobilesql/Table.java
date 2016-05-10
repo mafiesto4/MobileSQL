@@ -1,7 +1,8 @@
 package figat.pl.mobilesql;
 
-import java.util.ArrayList;
-
+/**
+ * Contains basic information about single table in program database
+ */
 public class Table {
     
     public String Name;

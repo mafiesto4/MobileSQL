@@ -35,7 +35,8 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements IViewObject {
 
     private GoogleApiClient client;
-    final Context context = this;
+    private final Context context = this;
+    private String lastTableName;
 
     // Switching views
     private View viewTablesList;
@@ -103,6 +104,12 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         Toolbar tableListToolbar = (Toolbar)findViewById(R.id.viewTablesListToolbar);
         setSupportActionBar(tableListToolbar);
         tableListToolbar.setNavigationIcon(R.drawable.ic_action_database);
+        tableListToolbar.setNavigationOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(context).setTitle("Info").setMessage("Brought to you by Wojciech Figat\nwww.figat.pl").show();
+            }
+        });
         getMenuInflater().inflate(R.menu.menu_main, tableListToolbar.getMenu());
 
         // Table View
@@ -229,6 +236,24 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         }
     }
 
+    private void deleteTable()
+    {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        Controller.getInstance().deleteTable(lastTableName);
+                        break;
+                }
+            }
+        };
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("Are you sure to delete table \'" + lastTableName + "\'?\nThis action cannot be undone.")
+                .setPositiveButton("OK", dialogClickListener)
+                .setNegativeButton("Cancel", dialogClickListener).show();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -255,10 +280,7 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
             return true;
         }
         if(id == R.id.action_deleteTable) {
-
-            Toolbar toolbar = (Toolbar) findViewById(R.id.viewTableViewToolbar);
-            String name = toolbar.getTitle().toString();
-            Controller.getInstance().deleteTable(name);
+            deleteTable();
             return true;
         }
         if(id == R.id.action_newEntry) {
@@ -292,42 +314,6 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         return super.onKeyDown(keyCode, event);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(Action.TYPE_VIEW, // TODO: choose an action type.
-                "Tables List", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://figat.pl.mobilesql/http/host/path"));
-        AppIndex.AppIndexApi.start(client, viewAction);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(Action.TYPE_VIEW, // TODO: choose an action type.
-                "Tables List", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://figat.pl.mobilesql/http/host/path"));
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
-    }
-
     public void navigate(String table)
     {
         navigate(Controller.getInstance().getModel().findTable(table));
@@ -335,6 +321,7 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
 
     @Override
     public void showTablesList() {
+        lastTableName = "";
         changeView(viewTablesList);
     }
 
@@ -346,7 +333,8 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
             return;
         }
 
-        // Navigate to that view
+        // Navigate to table view
+        lastTableName = table.Name;
         changeView(viewTableView);
         Toolbar toolbar = (Toolbar) findViewById(R.id.viewTableViewToolbar);
         toolbar.setTitle(table.Name);

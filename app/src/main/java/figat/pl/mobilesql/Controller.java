@@ -15,11 +15,15 @@ public class Controller {
     private Controller() {
     }
 
+    /**
+     * Link View component to the Controller
+     * @param context Application context
+     * @param viewObj View object
+     */
     public void linkView(Context context, IViewObject viewObj)
     {
         model = new Model(context);
         view = viewObj;
-
         view.onTablesModified();
     }
 
@@ -33,7 +37,7 @@ public class Controller {
     }
 
     /**
-     * Creates new sql database table
+     * Creates new SQL database table
      * @param name New table name
      */
     public void createTable(String name) {
@@ -64,7 +68,7 @@ public class Controller {
     }
 
     /**
-     * Deletes existing sql database table
+     * Deletes existing SQL database table
      * @param name New table name
      */
     public void deleteTable(String name) {

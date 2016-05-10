@@ -27,7 +27,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    /**
+     * Loads all tables from the database
+     * @param tables Result tables list
+     */
     public void loadTables(ArrayList<Table> tables) {
+
         SQLiteDatabase db = getReadableDatabase();
 
         // Clear list
@@ -61,6 +66,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    /***
+     * Create new table in a database
+     * @param name New table name
+     */
     public void createTable(String name) {
         // Validate name
         if (name.compareTo(TABLE_ROOT) == 0)
@@ -88,6 +97,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    /**
+     * Drops table and remove it's entry from the root table
+     * @param name Table name
+     */
     public void deleteTable(String name) {
         // Validate name
         if (name.compareTo(TABLE_ROOT) == 0)
@@ -96,6 +109,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
 
         db.execSQL("DROP TABLE IF EXISTS " + name);
+        db.execSQL("DELETE FROM " + TABLE_ROOT + " WHERE " + KEY_TABLE_NAME + " = \'" + name + "\'");
 
         db.close();
     }
