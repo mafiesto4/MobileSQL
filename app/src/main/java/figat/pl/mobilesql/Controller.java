@@ -11,8 +11,7 @@ public class Controller {
 
     /***
      * Gets singleton instance of the Controller object
-     *
-     * @return
+     * @return Instance
      */
     public static Controller getInstance() {
         return instance;
@@ -23,7 +22,6 @@ public class Controller {
 
     /**
      * Link View component to the Controller
-     *
      * @param context Application context
      * @param viewObj View object
      */
@@ -35,7 +33,6 @@ public class Controller {
 
     /***
      * Gets model object
-     *
      * @return Model object
      */
     public Model getModel() {
@@ -44,7 +41,6 @@ public class Controller {
 
     /**
      * Creates new SQL database table
-     *
      * @param name New table name
      */
     public void createTable(String name) {
@@ -74,7 +70,6 @@ public class Controller {
 
     /**
      * Deletes existing SQL database table
-     *
      * @param name New table name
      */
     public void deleteTable(String name) {
@@ -104,7 +99,6 @@ public class Controller {
 
     /***
      * Add new column to the table
-     *
      * @param tableName    Table name
      * @param columnName   Column name
      * @param columnType   Column type
@@ -134,7 +128,6 @@ public class Controller {
 
     /***
      * Remove column from the table
-     *
      * @param tableName  Table name
      * @param columnName Column name
      */
@@ -162,7 +155,6 @@ public class Controller {
 
     /**
      * Add row with default value to the table
-     *
      * @param tableName Table name
      */
     public void addRow(String tableName) {
@@ -188,7 +180,6 @@ public class Controller {
 
     /**
      * Remove row from the table
-     *
      * @param tableName Table name
      * @param index     Zero-based row index
      */
@@ -227,7 +218,6 @@ public class Controller {
 
     /**
      * Edit single cell value
-     *
      * @param tableName   Name of the table to edit
      * @param rowIndex    Zero-based row index
      * @param columnIndex Zero-based column index
