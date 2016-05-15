@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         }
     }
 
-    private void editCell(SqlTableText cell)
+    private void editCell(final SqlTableText cell)
     {
         // Setup a dialog window
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
@@ -208,9 +208,7 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         input.setText(cell.getText());
         alertDialogBuilder.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                new AlertDialog.Builder(context).setTitle("Edit").setMessage("new value: " + input.getText()).show();
-                //Controller.getInstance().createTable(input.getText().toString());
-                //Controller.getInstance().editCell(lastTableName, cell.rowIndex, cell.columnIndex, input.getText());
+                Controller.getInstance().editCell(lastTableName, cell.rowIndex, cell.columnIndex, input.getText().toString());
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -287,7 +285,8 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
                 tv.setPadding(3, 3, 3, 3);
                 tv.setText(rowData[j]);
 
-                if (allowEdit) {
+                // Check if can edit cell (disable for the first column with Dummy integer)
+                if (allowEdit && j > 0) {
                     tv.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View var1) {
