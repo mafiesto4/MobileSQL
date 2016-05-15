@@ -1,6 +1,5 @@
 package figat.pl.mobilesql;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -8,6 +7,9 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+/**
+ * Model object
+ */
 public class Model {
 
     DatabaseHandler handler;
@@ -15,7 +17,6 @@ public class Model {
 
     /**
      * Gets amount of tables
-     *
      * @return Amount of tables in a database
      */
     public int getTablesCount() {
@@ -24,7 +25,6 @@ public class Model {
 
     /***
      * Gets table at given index
-     *
      * @param index Table index
      * @return Table
      */
@@ -34,7 +34,6 @@ public class Model {
 
     /**
      * Init
-     *
      * @param context Application context
      */
     public Model(Context context) {
@@ -46,7 +45,6 @@ public class Model {
 
     /**
      * Tries to find table with given name
-     *
      * @param name Table name to find
      * @return Found table or null
      */
@@ -63,7 +61,6 @@ public class Model {
 
     /**
      * Creates new SQL database table
-     *
      * @param name New table name
      * @return New table
      */
@@ -82,7 +79,6 @@ public class Model {
 
     /**
      * Deletes SQL table
-     *
      * @param table Table to remove
      */
     public void deleteTable(Table table) {
@@ -96,7 +92,6 @@ public class Model {
 
     /**
      * Perform query to the database to gather table data to teh cache
-     *
      * @param table Table to update
      */
     public void getTableData(Table table) {
@@ -116,7 +111,6 @@ public class Model {
 
     /**
      * Performs SQL query to the database
-     *
      * @param sql SQL query text
      * @return Query result
      */
@@ -184,6 +178,8 @@ public class Model {
      * @param columnName Column name
      */
     public void removeColumn(Table table, String columnName) {
+
+        // TODO: finish this code
 
         getTableData(table);
 

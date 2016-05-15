@@ -1,20 +1,24 @@
 package figat.pl.mobilesql;
 
 import android.content.Context;
-import android.util.Log;
 
+/**
+ * Controller object (singleton)
+ */
 public class Controller {
 
     private static Controller instance = new Controller();
+
+    /***
+     * Gets singleton instance of the Controller object
+     * @return
+     */
     public static Controller getInstance() {
         return instance;
     }
 
     private Model model;
     private IViewObject view;
-
-    private Controller() {
-    }
 
     /**
      * Link View component to the Controller

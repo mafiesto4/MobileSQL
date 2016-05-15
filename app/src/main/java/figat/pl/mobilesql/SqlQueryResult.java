@@ -7,10 +7,24 @@ import java.util.ArrayList;
  */
 public class SqlQueryResult {
 
+    /**
+     * Amount of entries in the result
+     */
     public int EntriesCount;
+
+    /**
+     * Names of the columns
+     */
     public String[] ColumnNames;
+
+    /**
+     * Result data (row by row)
+     */
     public ArrayList<String[]> Data;
 
+    /**
+     * Init
+     */
     public SqlQueryResult() {
         EntriesCount = 0;
         ColumnNames = null;
