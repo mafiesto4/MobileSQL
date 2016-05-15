@@ -213,7 +213,7 @@ public class Controller {
                     row += " AND ";
                 row += table.cache.ColumnNames[column] + " = \'" + table.cache.Data.get(index)[column] + "\'";
             }
-            
+
             // Remove row
             model.rawQuery("DELETE FROM " + table.name + " WHERE " + row);
 

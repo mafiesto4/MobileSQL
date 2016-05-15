@@ -16,7 +16,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // Database Info
     private static final String DATABASE_NAME = "database.db";
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 11;
 
     // Root table
     private static final String TABLE_ROOT = "root";
@@ -78,7 +78,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
 
         db.execSQL("DROP TABLE IF EXISTS " + name);
-        db.execSQL("CREATE TABLE " + name + "( Dummy INTEGER DEFAULT 0 );");
+        db.execSQL("CREATE TABLE " + name + "( Dummy INTEGER PRIMARY KEY );");
         
         db.beginTransaction();
         try {

@@ -62,10 +62,9 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
     private EditText queryViewInput;
 
     /*
-    TODO: delete entry
     TODO: remove column
     TODO: primary keys
-    TODO: create/update entry
+    TODO: update entry
      */
 
     @Override
@@ -214,6 +213,7 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
             public void onClick(DialogInterface dialog, int id) {
                 new AlertDialog.Builder(context).setTitle("Edit").setMessage("new value: " + input.getText()).show();
                 //Controller.getInstance().createTable(input.getText().toString());
+                //Controller.getInstance().editCell(lastTableName, cell.rowIndex, cell.columnIndex, input.getText());
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -226,13 +226,7 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
         alertD.show();
     }
 
-    private void deleteRow(SqlTableText cell)
-    {
-        Controller.getInstance().deleteRow(lastTableName, cell.rowIndex);
-    }
-
-    private void updateTable(SqlQueryResult sqlResult, TableLayout table, boolean allowEdit)
-    {
+    private void updateTable(SqlQueryResult sqlResult, TableLayout table, boolean allowEdit) {
         // Clear previous data
         table.removeAllViews();
 
@@ -296,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
                 tv.setPadding(3, 3, 3, 3);
                 tv.setText(rowData[j]);
 
-                if(allowEdit) {
+                if (allowEdit) {
                     tv.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View var1) {
@@ -306,10 +300,10 @@ public class MainActivity extends AppCompatActivity implements IViewObject {
                                 public void onClick(DialogInterface dialog, int which) {
                                     switch (which) {
                                         case DialogInterface.BUTTON_POSITIVE:
-                                           editCell(cell);
+                                            editCell(cell);
                                             break;
                                         case DialogInterface.BUTTON_NEUTRAL:
-                                            deleteRow(cell);
+                                            Controller.getInstance().deleteRow(lastTableName, cell.rowIndex);
                                             break;
                                     }
                                 }
